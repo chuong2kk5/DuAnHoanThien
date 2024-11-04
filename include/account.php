@@ -8,22 +8,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         crossorigin="anonymous">
     <style>
-        ul li{
+        ul li {
             /* width: 100%; */
             text-align: left;
         }
-        ul li a{
-           color: black;
-          
+
+        ul li a {
+            color: black;
+
         }
-   
 
         .data-v-ed45279a {
             margin-right: 5px;
         }
 
-      
-      
         .heading img {
             margin-top: 20px;
             height: 58px;
@@ -73,16 +71,18 @@
         tbody button.btn-primary {
             font-size: 14px;
             cursor: pointer;
-        } */
+        }
+
+        */
     </style>
 </head>
 
 <body>
-   <?php include '../include/navbar.php' ?>
-   <br>
-   <br>
-   <br>
-        
+    <?php include '../include/navbar.php' ?>
+    <br>
+    <br>
+    <br>
+
     <div class="container" style="display: flex;">
         <article class="text-center"
             style="background-color: rgb(255, 254, 254); border: 1px solid rgb(220, 217, 217);  padding: 0; margin-right: 50px; border-radius: 5px">
@@ -339,7 +339,7 @@
         </aside>
     </div>
     <?php include '../include/footer.php'; ?>
-  
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
