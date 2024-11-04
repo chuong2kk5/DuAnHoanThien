@@ -9,12 +9,12 @@
         crossorigin="anonymous">
     <style>
         ul li{
-            width: 100%;
+            /* width: 100%; */
             text-align: left;
         }
         ul li a{
            color: black;
-           /* font-size: 16px; */
+          
         }
    
 
@@ -22,8 +22,8 @@
             margin-right: 5px;
         }
 
-        /* Styling for horizontal navigation */
-        /* Styling for avatar and phone number */
+      
+      
         .heading img {
             margin-top: 20px;
             height: 58px;
@@ -73,7 +73,7 @@
         tbody button.btn-primary {
             font-size: 14px;
             cursor: pointer;
-        }
+        } */
     </style>
 </head>
 
@@ -168,7 +168,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <img src="/D_A1/image/be-gai1.webp" alt="ảnh-sản-phẩm"
+                                            <img src="../image/" alt="ảnh-sản-phẩm"
                                                 style="height: 80px;">
                                             <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
                                             <p class="text-dsc">Hoàn háo cho phái nam và phát nữ form áo gọn gàng thanh
