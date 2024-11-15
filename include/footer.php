@@ -6,11 +6,49 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/D_A1/css/style.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+       <style>
+        /* Footer Styles */
+footer {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+footer p {
+    font-size: 14px; 
+    font-weight: 500; 
+    color: #333; 
+    text-align: left;
+}
+
+footer h6 {
+    font-size: 14px; 
+    font-weight: 700; 
+    color: #111; 
+    text-align: left;
+    text-transform: uppercase;
+}
+
+footer p.text-msg {
+    
+    font-size: 14px; 
+    font-weight: 400; 
+    line-height: 1.6;
+    color: #555; 
+    margin: 0;
+    padding: 5px 0;
+}
+
+/* Text Reset Styles */
+.text-reset:hover {
+    color: rgb(255, 0, 0) !important;
+    text-decoration: none !important;
+}
+       </style>
 </head>
 
 <body>
@@ -55,14 +93,14 @@
                 <div class="container text-center text-md-start mt-5">
                     <!-- Grid row -->
                     <div class="row mt-3">
-                        <!-- Grid column -->
+<!-- Grid column -->
                         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                             <!-- Content -->
                             <h6 class="text-uppercase fw-bold mb-4">
-                                <i class="fas fa-gem me-3"></i>Công ty cổ phần Beautyfful
+                                <i class="fas fa-gem me-3"></i>Công ty cổ phần Beautiful
                             </h6>
                             <p class="text-msg">
-                                <a class="text-reset fw-bold" href="#">Beautyfful</a> là cửa hàng chuyên cung cấp các sản phẩm thời trang với phong cách hiện đại
+                                <a class="text-reset fw-bold" href="#">Beautiful</a> là cửa hàng chuyên cung cấp các sản phẩm thời trang với phong cách hiện đại
                                 và phù hợp với nhiều lứa tuổi. Chúng tôi cam kết mang đến cho khách hàng những bộ trang
                                 phục chất lượng, hợp thời trang và luôn cập nhật xu hướng mới nhất. Đến với   <a class="text-reset fw-bold" href="#">Beautyfful</a>,
                                 bạn sẽ tìm thấy phong cách riêng của mình qua từng sản phẩm.
@@ -110,7 +148,7 @@
                             <p>
                                 <a href="#!" class="text-reset">Chính sách KHTT</a>
                             </p>
-                            <p>
+<p>
                                 <a href="#!" class="text-reset">Điều kiện - Điều khoản Chính sách KHTT</a>
                             </p>
                             <p>

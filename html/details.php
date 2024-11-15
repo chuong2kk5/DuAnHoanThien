@@ -1,64 +1,82 @@
+<?php
+include '../admin/config.php';
+
+$product_id = $_GET['product_id'];
+
+$stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$product_result = $stmt->get_result();
+$product = $product_result->fetch_assoc();
+
+$variants_stmt = $conn->prepare("SELECT * FROM product_variants WHERE variant_id = ?");
+$variants_stmt->bind_param("i", $product_id);
+$variants_stmt->execute();
+$variants_result = $variants_stmt->get_result();
+$variants = [];
+while ($variant = $variants_result->fetch_assoc()) {
+    $variants[] = $variant; // Lưu tất cả biến thể vào mảng
+}
+?>
+
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Tiết Sản Phẩm</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body>
-<?php include '../include/navbar.php' ?>
-
-    <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold text-center mb-8">Chi Tiết Sản Phẩm</h1>
-        <div class="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row">
-            <!-- Hình ảnh sản phẩm -->
-            <div class="md:w-1/2">
-                <img class="w-full h-auto rounded-lg" src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" alt="Sản phẩm">
+    <!-- Hiển thị thông tin sản phẩm -->
+    <div class="product-details container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4"><?php echo $product['name']; ?></h1>
+                <p class="lead"><?php echo $product['description']; ?></p>
+                <img src="<?php echo $product['image_path']; ?>" alt="Product Image" class="img-fluid">
             </div>
-            <!-- Thông tin sản phẩm -->
-            <div class="md:w-1/2 md:pl-6">
-                <h2 class="text-2xl font-semibold mt-4 md:mt-0">Tên Sản Phẩm</h2>
-                <span class="text-xl font-bold text-blue-500 mt-4 block">500.000đ</span>
-                <p class="text-gray-600 mt-2">Mô tả chi tiết về sản phẩm. Nơi đây có thể chứa thông tin về tính năng, công dụng, và những điều đặc biệt của sản phẩm.</p>
+            <div class="col-md-6">
+                <h2 class="h4">Price: $<span class="price"><?php echo $product['price']; ?></span></h2>
+                <p>Stock: <?php echo $product['quantity']; ?> items available</p>
 
-                <h3 class="text-lg font-semibold mt-4">Thông số kỹ thuật:</h3>
-                <ul class="list-disc list-inside text-gray-600 mt-2">
-                    <li>Kích thước: 10 x 5 x 2 cm</li>
-                    <li>Trọng lượng: 200g</li>
-                    <li>Chất liệu: Nhựa cao cấp</li>
-                    <li>Màu sắc: Đen, Trắng, Xanh</li>
-                </ul>
+                <h2 class="h4">Variants</h2>
 
-                <h3 class="text-lg font-semibold mt-4">Đánh giá của khách hàng:</h3>
-                <div class="mt-2">
-                    <p class="text-gray-600">"Sản phẩm rất tốt, chất lượng tuyệt vời!" - <span class="font-semibold">Nguyễn Văn A</span></p>
-                    <p class="text-gray-600">"Tôi rất hài lòng với dịch vụ và sản phẩm." - <span class="font-semibold">Trần Thị B</span></p>
-                </div>
+                 <!-- Form chọn size và màu sắc -->
+        <form action="add_to_cart.php" method="POST">
+            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
 
-                <div class="mt-6 flex space-x-2">
-                    <!-- Nút Yêu thích -->
-                    <button class="flex items-center bg-white border border-gray-300 text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                        <svg class="w-5 h-5 text-red-500 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                        Yêu thích
-                    </button>
-                    <!-- Nút Thêm vào Giỏ hàng -->
-                    <button class="bg-yellow-400 text-white px-3 py-2 rounded-lg hover:bg-yellow-500 transition-colors duration-200">
-                        Thêm vào Giỏ
-                    </button>
-                    <!-- Nút Mua Ngay -->
-                    <button class="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
-                        Mua Ngay
-                    </button>
-                </div>
+            <div class="mb-3">
+                <label for="size" class="form-label">Choose Size:</label>
+                <select name="size" id="size" class="form-control" required>
+                    <?php
+                    // Lấy danh sách kích cỡ từ bảng variants
+                    $sizes_result = $conn->query("SELECT DISTINCT size FROM variants");
+                    while ($row = $sizes_result->fetch_assoc()) {
+                        echo "<option value='{$row['size']}'>{$row['size']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="color" class="form-label">Choose Color:</label>
+                <select name="color" id="color" class="form-control" required>
+                    <?php
+                    // Lấy danh sách màu sắc từ bảng variants
+                    $colors_result = $conn->query("SELECT DISTINCT color FROM variants");
+                    while ($row = $colors_result->fetch_assoc()) {
+                        echo "<option value='{$row['color']}'>{$row['color']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
             </div>
         </div>
     </div>
-    <?php include '../include/footer.php' ?>
 </body>
 
 </html>

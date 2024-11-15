@@ -1,6 +1,13 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+include "../admin/config.php";
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
+  
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +24,9 @@
  
 
 <body>
+    
     <main>
+
 
         <?php include '../include/header.php' ?>
         <?php include '../include/navbar.php' ?>
@@ -25,6 +34,8 @@
         <?php include '../include/category.php' ?>
         <?php include '../include/footer.php' ?>
     </main>
+
+    
 
 
     <!-- Optional JavaScript -->

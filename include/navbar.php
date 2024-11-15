@@ -16,8 +16,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <style>
-   
+
 </style>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; height: 80px; padding: 0 100px;">
         <a href="../html/index.php">
@@ -121,8 +122,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <ul class="list-unstyled">
-                                    <a href="#"> <img style="width: 100%;" src="../image/đồ-nữ-1.png"
-                                            alt="anh-mau"></a>
+                                    <a href="#"> <img style="width: 100%;" src="../image/đồ-nữ-1.png" alt="anh-mau"></a>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -246,8 +246,21 @@
             <li class="nav-item" style="width: 100px; font-size: 15px;">
                 <a class="nav-link" href="#"><i class="bi bi-shop"></i> Cửa hàng</a>
             </li>
-            <li class="nav-item" style="width: 100px;font-size: 15px;">
-                <a class="nav-link" href="../include/account.php"><i class="bi bi-people"></i> Tài khoản</a>
+            <li class="nav-item dropdown" style="width: 100px; font-size: 15px;">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-people"></i> Tài khoản
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                    <li><a class="dropdown-item" href="../include/account.php">Xem tài khoản</a></li>
+
+                    <li>
+                        <a class="dropdown-item" href="../login/login.php" id="authLink">Đăng nhập</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="../login/logout.php" id="authLink">Đăng xuất</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item" style="width: 100px;font-size: 15px;">
                 <a class="nav-link" href="../html/cart.php"><i class="bi bi-cart4"></i> Giỏ hàng</a>
@@ -255,6 +268,21 @@
         </ul>
     </nav>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authLink = document.getElementById('authLink');
+        
+        const isLoggedIn = false;  
+        
+        if (isLoggedIn) {
+            authLink.textContent = "Đăng xuất";
+            authLink.href = "../login/logout.php";
+        } else {
+            authLink.textContent = "Đăng nhập";
+            authLink.href = "../login/login.php";
+        }
+    });
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery, Popper.js, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
