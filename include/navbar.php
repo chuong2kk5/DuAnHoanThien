@@ -1,3 +1,6 @@
+<?php 
+    $isLoggedIn = isset($_SESSION['user_id']);
+?>
 <!doctype html>
 <html lang="en">
 
@@ -5,9 +8,7 @@
     <title>nav bar</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/D_A1/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
-
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha384-xh6Fe+6IB0cZnOTmII2KN2II2RVaxVp5jyzsLl2zdGqQ5I+zpjsiW93htB7bHJBL" crossorigin="anonymous">
@@ -242,26 +243,27 @@
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
+
         <ul class="navbar-nav">
             <li class="nav-item" style="width: 100px; font-size: 15px;">
                 <a class="nav-link" href="#"><i class="bi bi-shop"></i> Cửa hàng</a>
             </li>
+
             <li class="nav-item dropdown" style="width: 100px; font-size: 15px;">
                 <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-people"></i> Tài khoản
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                    <li><a class="dropdown-item" href="../include/account.php">Xem tài khoản</a></li>
+                    <li><a class="dropdown-item" id="accountLink" href="../include/account.php?user_id=<?php echo $_SESSION['user_id']; ?>">Xem tài khoản</a></li>
 
                     <li>
                         <a class="dropdown-item" href="../login/login.php" id="authLink">Đăng nhập</a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" href="../login/logout.php" id="authLink">Đăng xuất</a>
-                    </li>
+                     
                 </ul>
             </li>
+
             <li class="nav-item" style="width: 100px;font-size: 15px;">
                 <a class="nav-link" href="../html/cart.php"><i class="bi bi-cart4"></i> Giỏ hàng</a>
             </li>
@@ -271,15 +273,14 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const authLink = document.getElementById('authLink');
-        
-        const isLoggedIn = false;  
-        
+        const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
         if (isLoggedIn) {
             authLink.textContent = "Đăng xuất";
             authLink.href = "../login/logout.php";
         } else {
             authLink.textContent = "Đăng nhập";
             authLink.href = "../login/login.php";
+            accountLink.textContent = "Đăng nhập để xem chức năng này";
         }
     });
     </script>

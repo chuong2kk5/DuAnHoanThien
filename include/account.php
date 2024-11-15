@@ -1,4 +1,26 @@
-<!doctype html>
+<?php
+session_start();
+include('../admin/config.php');
+
+$user_id = $_SESSION['user_id'];
+
+//   sql user
+
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$user_result = $stmt->get_result();
+$user = $user_result->fetch_assoc();
+
+//  addresses
+$stmt = $conn->prepare("SELECT * FROM addresses WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$address_result = $stmt->get_result();
+$address = $address_result->fetch_assoc();
+
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,6 +29,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         ul li {
             /* width: 100%; */
@@ -15,7 +39,6 @@
 
         ul li a {
             color: black;
-
         }
 
         .data-v-ed45279a {
@@ -72,8 +95,6 @@
             font-size: 14px;
             cursor: pointer;
         }
-
-        */
     </style>
 </head>
 
@@ -83,13 +104,32 @@
     <br>
     <br>
 
+    <!-- Error -->
+    <div class="error">
+        <?php
+        if (!isset($_SESSION['user_id'])) {
+            echo '<script>
+            Swal.fire({
+                title: "Bạn chưa đăng nhập ?",
+                text: "",
+                icon: "question"
+            });
+            
+        </script>';
+            exit();
+        }
+        ?>
+    </div>
+
+
     <div class="container" style="display: flex;">
         <article class="text-center"
             style="background-color: rgb(255, 254, 254); border: 1px solid rgb(220, 217, 217);  padding: 0; margin-right: 50px; border-radius: 5px">
             <!-- User Profile -->
             <div class="heading text-center">
-                <img src="http://pluspng.com/img-png/user-png-icon-big-image-png-2240.png" alt="avatar">
-                <p id="phone" class="phone">03368451037</p>
+                <img src="https://static.vecteezy.com/system/resources/previews/024/183/535/original/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector.jpg"
+                    alt="avatar">
+                <p id="phone" class="phone">Xin chào <?php echo htmlspecialchars($user['username']); ?></p>
             </div>
 
             <!-- Nav tabs -->
@@ -107,8 +147,9 @@
                     <a href="#tab3Id" class="nav-link" data-toggle="tab">Yêu thích</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#tab4Id" class="nav-link" data-toggle="tab">Đăng xuất</a>
+                    <a href="#tab4Id" class="nav-link" data-toggle="tab">Thêm Địa Chỉ</a>
                 </li>
+
             </ul>
         </article>
 
@@ -118,37 +159,41 @@
             <div class="tab-content">
                 <!-- Tab 0: Thông tin -->
                 <div class="tab-pane fade show active" id="tab0Id" role="tabpanel">
-                    <div class="smg-text "
-                        style="border: 1px solid  rgb(220, 217, 217); border-radius: 5px;  box-shadow: 0px 2px 2px 0px  rgb(220, 217, 217); padding: 30px;">
+                    <div class="smg-text"
+                        style="border: 1px solid rgb(220, 217, 217); border-radius: 5px; box-shadow: 0px 2px 2px 0px rgb(220, 217, 217); padding: 30px;">
                         <h2 class="card-title">Thông tin tài khoản</h2>
                         <div class="control-information">
-                            <p>Giới tính</p>
-                            <div class="control" style="display: flex; flex-wrap: 1;">
-                                <input class="data-v-ed45279a" type="radio" name="radio" id="radio1" value="1"
-                                    checked="checked">
-                                <span class="data-v-ed45279a">Nam</span>
-                                <input class="data-v-ed45279a" type="radio" name="radio" id="radio1" value="1"
-                                    checked="checked">
-                                <span class="data-v-ed45279a">Nữ</span>
-                                <input class="data-v-ed45279a" type="radio" name="radio" id="radio1" value="1"
-                                    checked="checked">
-                                <span class="data-v-ed45279a">Khác</span>
+                            <div class="form-group active">
+                                <label>Tên đăng nhập</label>
+                                <input type="text" name="firstName"
+                                    value="<?php echo htmlspecialchars($user['username']); ?>" readonly
+                                    class="form-control">
                             </div>
-                            <div class="form-group active"><label>Họ tên</label> <input type="text" name="firstName"
-                                    class="form-control "></div>
-                            <div class="form-group active"><label>Số điện thoại</label> <input disabled="disabled"
-                                    type="text" name="phone" class="form-control "></div>
-                            <div class="form-group active"><label>Email</label> <input type="text" name="email"
-                                    class="form-control "></div>
-                            <input type="date" data-date-format="DD MMMM YYYY" name="" min="01-01-1971" id="birthday"
-                                class="form-control">
-                            <br>
-                            <div class="form-button text-center">
-                                <button type="submit" class="btn btn-primary ">Lưu thay đổi</button>
+
+                            <div class="form-group active">
+                                <label>Số điện thoại</label>
+                                <input value="09712537112" disabled="disabled" type="text" name="phone"
+                                    class="form-control">
                             </div>
+
+                            <div class="form-group active">
+                                <label>Email</label>
+                                <input type="text" name="firstName"
+                                    value="<?php echo htmlspecialchars($user['email']); ?>" readonly
+                                    class="form-control">
+                            </div>
+
+                            <div class="form-group active">
+                                <label>Địa Chỉ</label>
+                                <input type="text" name="address" class="form-control"
+                                    value="<?php echo isset($address['address_line']) && isset($address['city']) && isset($address['state']) && isset($address['country']) ? $address['address_line'] . ', ' . $address['city'] . ', ' . $address['state'] . ', ' . $address['country'] : ''; ?>"
+                                    readonly placeholder="bạn chưa có địa chỉ. Vui lòng thêm địa chỉ">
+                            </div>
+
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane fade show " id="tab1Id" role="tabpanel">
                     <!-- Account Information Section -->
                     <div class="card ">
@@ -168,8 +213,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <img src="../image/" alt="ảnh-sản-phẩm"
-                                                style="height: 80px;">
+                                            <img src="../image/" alt="ảnh-sản-phẩm" style="height: 80px;">
                                             <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
                                             <p class="text-dsc">Hoàn háo cho phái nam và phát nữ form áo gọn gàng thanh
                                                 lịch phù hợp
@@ -335,12 +379,53 @@
                 </div>
                 <!-- Other Tabs (like tab1Id, tab2Id) -->
                 <!-- Add content for each tab if needed -->
+                <div style="margin-left: 20px;" class="tab-pane fade show " id="tab4Id" role="tabpanel">
+                    <br>
+                    <h2>Thêm Địa Chỉ</h2>
+                    <form class="form-group" method="POST" action="add_adress.php">
+
+                        <div class="form-group">
+                            <label for="address_line">Địa chỉ:</label>
+                            <input class="form-control" type="text" id="address_line" name="address_line" required>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="city">Thành phố:</label>
+                            <input class="form-control" type="text" id="city" name="city" required>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="state">Tỉnh/Thành phố:</label>
+                            <input class="form-control" type="text" id="state" name="state" required>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="postal_code">Mã bưu điện:</label>
+                            <input class="form-control" type="text" id="postal_code" name="postal_code" required>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="country">Quốc gia:</label>
+                            <input class="form-control" type="text" id="country" name="country" required>
+                        </div>
+
+                        <input class="btn btn-primary" type="submit" value="Thêm Địa Chỉ">
+                    </form>
+                </div>
             </div>
         </aside>
     </div>
+
+
+
     <?php include '../include/footer.php'; ?>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
 </body>

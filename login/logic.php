@@ -4,10 +4,6 @@ ini_set('display_errors', 1);
 include "../admin/config.php";
 session_start();
 
-
- 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $recaptchaSecret = '6LcdoTgqAAAAALEc6TKoLRsOIxic-oe6AcybW6zR';
     $recaptchaResponse = $_POST['g-recaptcha-response'];

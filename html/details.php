@@ -14,8 +14,7 @@ $variants_stmt->bind_param("i", $product_id);
 $variants_stmt->execute();
 $variants_result = $variants_stmt->get_result();
 $variants = [];
-while ($variant = $variants_result->fetch_assoc()) {
-    $variants[] = $variant; // Lưu tất cả biến thể vào mảng
+while ($variant = $variants_result->fetch_assoc()) { // Lưu tất cả biến thể vào mảng
 }
 ?>
 
@@ -31,6 +30,7 @@ while ($variant = $variants_result->fetch_assoc()) {
 </head>
 
 <body>
+    <?php include '../include/navbar.php'; ?>
     <!-- Hiển thị thông tin sản phẩm -->
     <div class="product-details container">
         <div class="row">
@@ -77,6 +77,9 @@ while ($variant = $variants_result->fetch_assoc()) {
             </div>
         </div>
     </div>
+
+    <?php include '../include/footer.php'; ?>
+
 </body>
 
 </html>

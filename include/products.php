@@ -1,8 +1,9 @@
 <?php
 include "../admin/config.php";
-
+$isLoggedIn = isset($_SESSION['user_id']);
 $sql = "SELECT * FROM products";
 $result = $conn->query(query: $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -13,8 +14,11 @@ $result = $conn->query(query: $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Sản Phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="path/to/bootstrap.min.css" rel="stylesheet">
+    <script src="path/to/bootstrap.bundle.min.js"></script>
+    
 </head>
-
+ 
 <body class="bg-gray-100">
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-center mb-8">Sản Phẩm</h1>
