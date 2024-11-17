@@ -1,5 +1,5 @@
-<?php 
-    $isLoggedIn = isset($_SESSION['user_id']);
+<?php
+$isLoggedIn = isset($_SESSION['user_id']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -250,17 +250,16 @@
             </li>
 
             <li class="nav-item dropdown" style="width: 100px; font-size: 15px;">
-                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button">
                     <i class="bi bi-people"></i> Tài khoản
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                    <li><a class="dropdown-item" id="accountLink" href="../include/account.php?user_id=<?php echo $_SESSION['user_id']; ?>">Xem tài khoản</a></li>
-
+                <ul class="dropdown-menu" id="dropdownMenu" aria-labelledby="accountDropdown" style="display: none;">
+                    <li><a class="dropdown-item" id="accountLink"
+                            href="../include/account.php?user_id=<?php echo $_SESSION['user_id']; ?>">Xem tài khoản</a>
+                    </li>
                     <li>
                         <a class="dropdown-item" href="../login/login.php" id="authLink">Đăng nhập</a>
                     </li>
-                     
                 </ul>
             </li>
 
@@ -271,18 +270,39 @@
     </nav>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const authLink = document.getElementById('authLink');
-        const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
-        if (isLoggedIn) {
-            authLink.textContent = "Đăng xuất";
-            authLink.href = "../login/logout.php";
-        } else {
-            authLink.textContent = "Đăng nhập";
-            authLink.href = "../login/login.php";
-            accountLink.textContent = "Đăng nhập để xem chức năng này";
-        }
-    });
+
+        //  drop down
+        const dropdownToggle = document.getElementById('accountDropdown');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        // Thêm sự kiện click
+        dropdownToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Đóng dropdown khi click ra ngoài
+        document.addEventListener('click', function (e) {
+            if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const authLink = document.getElementById('authLink');
+            const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
+            if (isLoggedIn) {
+                authLink.textContent = "Đăng xuất";
+                authLink.href = "../login/logout.php";
+            } else {
+                authLink.textContent = "Đăng nhập";
+                authLink.href = "../login/login.php";
+                accountLink.textContent = "Đăng nhập để xem chức năng này";
+            }
+        });
     </script>
     <!-- Optional JavaScript -->
     <!-- jQuery, Popper.js, Bootstrap JS -->

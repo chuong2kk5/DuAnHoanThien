@@ -13,11 +13,13 @@ $user_result = $stmt->get_result();
 $user = $user_result->fetch_assoc();
 
 //  addresses
-$stmt = $conn->prepare("SELECT * FROM addresses WHERE user_id = ?");
+$sql = "SELECT address_line, city, state, country FROM addresses WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$address_result = $stmt->get_result();
-$address = $address_result->fetch_assoc();
+$result = $stmt->get_result();
+
+
 
 ?>
 <!DOCTYPE html>
@@ -105,20 +107,21 @@ $address = $address_result->fetch_assoc();
     <br>
 
     <!-- Error -->
-    <div class="error">
-        <?php
-        if (!isset($_SESSION['user_id'])) {
-            echo '<script>
+    <?php
+    if (!isset($_SESSION['user_id'])) {
+        echo '<script>
             Swal.fire({
                 title: "Bạn chưa đăng nhập ?",
                 text: "",
                 icon: "question"
+            }).then(function() {
+                window.location.href = "indexs.php";  // Redirect after closing the alert
             });
-            
-        </script>';
-            exit();
-        }
-        ?>
+          </script>';
+        exit();
+    }
+    ?>
+
     </div>
 
 
@@ -184,11 +187,17 @@ $address = $address_result->fetch_assoc();
                             </div>
 
                             <div class="form-group active">
-                                <label>Địa Chỉ</label>
-                                <input type="text" name="address" class="form-control"
-                                    value="<?php echo isset($address['address_line']) && isset($address['city']) && isset($address['state']) && isset($address['country']) ? $address['address_line'] . ', ' . $address['city'] . ', ' . $address['state'] . ', ' . $address['country'] : ''; ?>"
-                                    readonly placeholder="bạn chưa có địa chỉ. Vui lòng thêm địa chỉ">
-                            </div>
+                            <label for="country">Địa Chỉ Của Bạn</label>
+                            <select class="form-control">
+                                <?php
+                                while ($address = $result->fetch_assoc()) {
+                                    echo '<option value="' . htmlspecialchars($address['address_line']) . '">';
+                                    echo htmlspecialchars($address['address_line']) . ', ' . htmlspecialchars($address['city']) . ', ' . htmlspecialchars($address['state']) . ', ' . htmlspecialchars($address['country']);
+                                    echo '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
 
                         </div>
                     </div>
@@ -389,11 +398,9 @@ $address = $address_result->fetch_assoc();
                             <input class="form-control" type="text" id="address_line" name="address_line" required>
                         </div>
 
-
                         <div class="form-group">
                             <label for="city">Thành phố:</label>
                             <input class="form-control" type="text" id="city" name="city" required>
-
                         </div>
 
                         <div class="form-group">
@@ -401,18 +408,17 @@ $address = $address_result->fetch_assoc();
                             <input class="form-control" type="text" id="state" name="state" required>
                         </div>
 
-
                         <div class="form-group">
                             <label for="postal_code">Mã bưu điện:</label>
                             <input class="form-control" type="text" id="postal_code" name="postal_code" required>
                         </div>
 
-
                         <div class="form-group">
                             <label for="country">Quốc gia:</label>
                             <input class="form-control" type="text" id="country" name="country" required>
                         </div>
-
+                       
+                        <br>
                         <input class="btn btn-primary" type="submit" value="Thêm Địa Chỉ">
                     </form>
                 </div>
