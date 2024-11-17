@@ -1,10 +1,14 @@
 <?php
-include "../admin/config.php";
-$isLoggedIn = isset($_SESSION['user_id']);
-$sql = "SELECT * FROM products";
-$result = $conn->query(query: $sql);
+// session_start(); // Khởi động session
+include "../admin/config.php";  // Kết nối database
 
+
+
+// Lấy danh sách sản phẩm từ database
+$sql = "SELECT * FROM products";
+$result = $conn->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -14,11 +18,8 @@ $result = $conn->query(query: $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Sản Phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="path/to/bootstrap.min.css" rel="stylesheet">
-    <script src="path/to/bootstrap.bundle.min.js"></script>
-    
 </head>
- 
+
 <body class="bg-gray-100">
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-center mb-8">Sản Phẩm</h1>
@@ -31,7 +32,7 @@ $result = $conn->query(query: $sql);
                 <!-- Product Card -->
                 <div class="bg-white rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
                     <div class="relative">
-                        <a href="details.php?product_id=<?php echo $row['product_id']; ?>">
+                        <a href="details.php?id=<?php echo $row['product_id']; ?>">
                             <img class="w-full h-64 object-cover transition-transform duration-300 hover:scale-105" src="<?php echo $row['image_path']; ?>" alt="<?php echo $row['name']; ?>">
                         </a>
                         <!-- Nút Yêu thích -->
@@ -59,12 +60,17 @@ $result = $conn->query(query: $sql);
                     </div>
                     <div class="p-3">
                         <h3 class="text-lg font-semibold text-gray-800"><?php echo $row["name"]; ?></h3>
-                        <p class="text-gray-600 mt-1 text-sm"><?php echo $row["description"]; ?></p>
+                       
                         <div class="mt-3 flex justify-between items-center">
-                            <span class="text-lg font-bold text-blue-500"><?php echo number_format($row["price"], 0, ',', '.') . ' VNĐ'; ?></span>
+                            <span class="text-lg font-bold text-blue-500"><?php echo number_format($row["price"], 0, ',', '.') . 'đ'; ?></span>
                         </div>
                         <div class="mt-3 flex space-x-2">
-                            <button class="flex items-center bg-yellow-400 text-white px-2 py-1 rounded-lg hover:bg-yellow-500 transition-colors duration-100">Thêm vào Giỏ</button>
+                        <form action="cart_page.php" method="POST">
+                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>"> 
+                            <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
+                            <button class="btn btn-success" type="submit">Thêm vào Giỏ</button>
+                        </form>
+
                             <button class="flex items-center bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600 transition-colors duration-200">Mua Ngay</button>
                         </div>
                     </div>

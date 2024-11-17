@@ -1,63 +1,126 @@
-<!DOCTYPE html>
-<html lang="vi">
+<?php
+// cart.php
+// session_start();
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giỏ Hàng</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+include_once '../admin/config.php';
 
-<body class="bg-gray-100">
-<?php include '../include/navbar.php' ?>
+class Cart {
+    private $user_id;
+    private $conn;
 
-    <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold text-center mb-8">Giỏ Hàng</h1>
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <table class="min-w-full">
-                <thead>
-                    <tr class="border-b">
-                        <th class="py-2 text-left">Sản phẩm</th>
-                        <th class="py-2 text-left">Giá</th>
-                        <th class="py-2 text-left">Số lượng</th>
-                        <th class="py-2 text-left">Tổng</th>
-                        <th class="py-2 text-left">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="border-b">
-                        <td class="py-4 flex items-center">
-                            <img class="w-20 h-20 rounded mr-4" src="link_hinh_san_pham_1" alt="Sản phẩm 1">
-                            <span>Tên Sản Phẩm 1</span>
-                        </td>
-                        <td class="py-4">200.000đ</td>
-                        <td class="py-4">
-                            <input type="number" min="1" value="1" class="border rounded w-16 text-center">
-                        </td>
-                        <td class="py-4">200.000đ</td>
-                        <td class="py-4">
-                            <button class="text-red-500 hover:text-red-700">Xóa</button>
-                        </td>
-                    </tr>
-                  
-                </tbody>
-            </table>
+    public function __construct($user_id, $conn) {
+        $this->user_id = $user_id;
+        $this->conn = $conn;
+    }
 
-            <div class="mt-6 flex justify-between">
-                <span class="font-bold text-xl">Tổng Giá Trị Đơn Hàng: <span class="text-blue-500">500.000đ</span></span>
-                <div>
-                    <button class="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors duration-200">
-                        Tiếp Tục Mua Sắm
-                    </button>
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 ml-2">
-                        Thanh Toán
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php include '../include/footer.php' ?>
+    // Thêm sản phẩm vào giỏ
+    public function addItem($product_id, $quantity) {
+        global $conn;
 
-</body>
+        // Kiểm tra xem người dùng đã có giỏ hàng chưa
+        $sql = "SELECT cart_id FROM carts WHERE user_id = '$this->user_id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $cart_id = $row['cart_id'];
 
-</html>
+            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+            $sql = "SELECT * FROM cart_items WHERE cart_id = '$cart_id' AND product_id = '$product_id'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                // Nếu có, cập nhật số lượng
+                $sql = "UPDATE cart_items SET quantity = quantity + $quantity WHERE cart_id = '$cart_id' AND product_id = '$product_id'";
+                $conn->query($sql);
+            } else {
+                // Nếu chưa có, thêm sản phẩm vào giỏ hàng
+                $sql = "INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ('$cart_id', '$product_id', '$quantity')";
+                $conn->query($sql);
+            }
+        } else {
+            // Tạo giỏ hàng mới cho người dùng
+            $sql = "INSERT INTO carts (user_id) VALUES ('$this->user_id')";
+            $conn->query($sql);
+            $cart_id = $conn->insert_id;
+
+            // Thêm sản phẩm vào giỏ hàng
+            $sql = "INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ('$cart_id', '$product_id', '$quantity')";
+            $conn->query($sql);
+        }
+    }
+
+    // Cập nhật số lượng sản phẩm
+    public function updateQuantity($product_id, $quantity) {
+        global $conn;
+
+        // Lấy cart_id của người dùng
+        $sql = "SELECT cart_id FROM carts WHERE user_id = '$this->user_id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $cart_id = $row['cart_id'];
+
+            $sql = "UPDATE cart_items SET quantity = '$quantity' WHERE cart_id = '$cart_id' AND product_id = '$product_id'";
+            $conn->query($sql);
+        }
+    }
+
+    // Xoá sản phẩm khỏi giỏ
+    public function removeItem($product_id) {
+        global $conn;
+
+        // Lấy cart_id của người dùng
+        $sql = "SELECT cart_id FROM carts WHERE user_id = '$this->user_id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $cart_id = $row['cart_id'];
+
+            $sql = "DELETE FROM cart_items WHERE cart_id = '$cart_id' AND product_id = '$product_id'";
+            $conn->query($sql);
+        }
+    }
+
+    // Lấy tất cả sản phẩm trong giỏ
+    public function getItems() {
+        global $conn;
+
+        $sql = "SELECT p.*, ci.quantity FROM products p JOIN cart_items ci ON p.product_id = ci.product_id JOIN carts c ON ci.cart_id = c.cart_id WHERE c.user_id = '$this->user_id'";
+        $result = $conn->query($sql);
+        $items = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $items[$row['product_id']] = $row;
+            }
+        }
+        return $items;
+    }
+
+    // Tính tổng giá trị giỏ hàng
+    public function getTotal() {
+        global $conn;
+
+        $total = 0;
+        $items = $this->getItems();
+        foreach ($items as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+        return $total;
+    }
+
+    // Xóa giỏ hàng
+    public function clearCart() {
+        global $conn;
+
+        // Lấy cart_id của người dùng
+        $sql = "SELECT cart_id FROM carts WHERE user_id = '$this->user_id'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $cart_id = $row['cart_id'];
+
+            $sql = "DELETE FROM cart_items WHERE cart_id = '$cart_id'";
+            $conn->query($sql);
+        }
+    }
+}
+?>
