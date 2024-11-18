@@ -1,29 +1,26 @@
 <?php
 session_start();
  var_dump( $_SESSION['user_id']);
-include "cart.php";  // Đảm bảo bạn đã bao gồm cart.php để sử dụng các hàm trong đó.
+include "cart.php"; 
 ini_set('display_errors', '1'); 
 // Khởi tạo đối tượng Cart
 $cart = new Cart($_SESSION['user_id'], $conn); 
 
-// Kiểm tra xem có yêu cầu thêm sản phẩm không
 if (isset($_POST['product_id'])) {
     $product_id = $_POST['product_id']; 
 
-    // Lấy thông tin sản phẩm từ database 
     $sql = "SELECT * FROM products WHERE product_id = '$product_id'";
     $result = $conn->query($sql); 
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
 
-        // Thêm sản phẩm vào giỏ hàng
         $cart->addItem($product_id, 1); 
 
         // Chuyển hướng về cart_page.php
         header("Location: cart_page.php");
         exit; 
-    } else {
+    } else {    
         echo "Sản phẩm không tồn tại";
     }
 }
@@ -121,8 +118,8 @@ $total = $cart->getTotal();
                     <span class="font-bold text-xl">Tổng Giá Trị Đơn Hàng: <span class="text-blue-500"><?php echo number_format($total, 0, ',', '.') . 'đ'; ?></span></span>
                     <div>
                         <a href="newProduct.php" class="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors duration-200">Tiếp Tục Mua Sắm</a>
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 ml-2">Thanh Toán</button>
-                    </div>
+                        <a href="checkout.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 ml-2">Thanh Toán</a>
+                        </div>
                     <a href="../html/thongtindathang.php">Thông tin đặt hàng</a>
                 </div>
             <?php } ?>

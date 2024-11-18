@@ -3,6 +3,7 @@
 // session_start();
 
 include_once '../admin/config.php';
+$cart = new Cart($_SESSION['user_id'], $conn);
 
 class Cart {
     private $user_id;
@@ -96,16 +97,16 @@ class Cart {
     }
 
     // Tính tổng giá trị giỏ hàng
-    public function getTotal() {
-        global $conn;
-
-        $total = 0;
-        $items = $this->getItems();
-        foreach ($items as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-        return $total;
-    }
+  public function getTotal() {
+      global $conn;
+  
+      $total = 0;
+      $items = $this->getItems();
+      foreach ($items as $item) {
+          $total += $item['price'] * $item['quantity'];
+      }
+      return $total;
+  }
 
     // Xóa giỏ hàng
     public function clearCart() {

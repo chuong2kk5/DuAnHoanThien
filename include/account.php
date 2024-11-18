@@ -205,65 +205,7 @@ $result = $stmt->get_result();
 
                 <div class="tab-pane fade show " id="tab1Id" role="tabpanel">
                     <!-- Account Information Section -->
-                    <div class="card ">
-                        <div class="card-header">
-                            Đơn Hàng
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Sản phẩm</th>
-                                        <th style="width: 150px;">Tổng đơn hàng</th>
-                                        <th style="width: 150px;">đánh giá nhanh</th>
-                                        <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="../image/" alt="ảnh-sản-phẩm" style="height: 80px;">
-                                            <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
-                                            <p class="text-dsc">Hoàn háo cho phái nam và phát nữ form áo gọn gàng thanh
-                                                lịch phù hợp
-                                                với mọi gu thời trang</p>
-                                        </td>
-                                        <td>
-                                            <h5 class="price"> 526.000 vnđ </h5>
-                                        </td>
-                                        <td>#####</td>
-                                        <td>
-                                            <button type="submit" class="btn btn-primary">Viết đánh giá</button>
-                                            <button type="submit" class="btn btn-primary">Quay lại mua hàng</button>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <img src="/D_A1/image/be-gai1.webp" alt="ảnh-sản-phẩm"
-                                                style="height: 80px;">
-                                            <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
-                                            <p class="text-dsc">Hoàn háo cho phái nam và phát nữ form áo gọn gàng thanh
-                                                lịch phù hợp
-                                                với mọi gu thời trang</p>
-                                        </td>
-                                        <td>
-                                            <h5 class="price"> 526.000 vnđ </h5>
-                                        </td>
-                                        <td>#####</td>
-                                        <td>
-                                            <button type="submit" class="btn btn-primary">Viết đánh giá</button>
-                                            <button type="submit" class="btn btn-primary">Quay lại mua hàng</button>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="card-footer">
-                            Đơn hàng đã mua của bạn!
-                        </div>
-                    </div>
+                  <?php include 'thongtindathang.php' ?>
                 </div>
 
                 <div class="tab-pane fade show " id="tab2Id" role="tabpanel">

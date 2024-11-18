@@ -264,7 +264,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             </li>
 
             <li class="nav-item" style="width: 100px;font-size: 15px;">
-                <a class="nav-link" href="../html/cart.php"><i class="bi bi-cart4"></i> Giỏ hàng</a>
+                <a class="nav-link" href="../html/cart_page.php"><i class="bi bi-cart4"></i> Giỏ hàng</a>
             </li>
         </ul>
     </nav>
