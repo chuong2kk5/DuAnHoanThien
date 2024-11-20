@@ -21,6 +21,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
 </style>
 
 <body>
+<?php include '../html/loading.php' ?>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; height: 80px; padding: 0 100px;">
         <a href="../html/index.php">
             <div class="image-logo" style="margin-right: 30px;">

@@ -1,14 +1,13 @@
 <?php
-// session_start(); // Khởi động session
+
+$isLoggedIn = isset($_SESSION['user_id']);
+
 include "../admin/config.php";  // Kết nối database
-
-
 
 // Lấy danh sách sản phẩm từ database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -18,8 +17,23 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Sản Phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+</head>
+<?php 
+    if(!$isLoggedIn){
+        echo " <script>
+         Swal.fire({
+             position: 'top-end',
+             icon: 'error',
+             title: 'Vui lòng đăng nhập',
+             showConfirmButton: false,
+             timer: 1300
+           });
+         </script>";
+         exit();
+     }
+?>
 <body class="bg-gray-100">
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-center mb-8">Sản Phẩm</h1>

@@ -1,58 +1,107 @@
 <?php
-session_start();
-
-// Kiểm tra xem có thông tin tổng tiền từ trước khi chuyển hướng
-if (!isset($_GET['total']) || $_GET['total'] <= 0) {
-    die("Lỗi: Không có thông tin thanh toán.");
-}
-
-// Các thông tin nhận được từ form thanh toán
-$total = $_GET['total'];
-$order_id = time(); // Sử dụng thời gian hiện tại làm mã đơn hàng
-$order_desc = 'Thanh toán đơn hàng qua VNPAY'; // Mô tả đơn hàng
-
-// Các thông tin kết nối với VNPAY (nhớ thay thế các giá trị này bằng thông tin của bạn)
-$vnp_TmnCode = 'Your_TMN_Code'; // Mã thương nhân
-$vnp_HashSecret = 'Your_Hash_Secret'; // Chìa khóa bí mật
-$vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vnpay.zalopay.vn'; // Địa chỉ URL VNPAY
-
-// URL trả kết quả sau khi thanh toán
-$vnp_Returnurl = 'https://yourwebsite.com/vnpay_return.php'; // Địa chỉ để nhận kết quả từ VNPAY
-
-// Thông tin gửi lên VNPAY
-$vnp_TxnRef = $order_id; // Mã đơn hàng
-$vnp_OrderInfo = $order_desc; // Mô tả đơn hàng
-$vnp_Amount = $total * 100; // Tổng tiền cần thanh toán, VNPAY yêu cầu phải nhân với 100 (VND)
-$vnp_Locale = 'vn'; // Ngôn ngữ giao diện, có thể là 'vn' (Tiếng Việt) hoặc 'en' (Tiếng Anh)
-$vnp_Currency = 'VND'; // Đơn vị tiền tệ
-$vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // Địa chỉ IP của người thanh toán
-
-// Tạo dữ liệu gửi lên VNPAY (các tham số yêu cầu)
-$vnp_Params = array(
-    "vnp_Version" => "2.1.0",
-    "vnp_TmnCode" => $vnp_TmnCode,
-    "vnp_Amount" => $vnp_Amount,
-    "vnp_Command" => "pay",
-    "vnp_CreateDate" => date('YmdHis'),
-    "vnp_Currency" => $vnp_Currency,
-    "vnp_IpAddr" => $vnp_IpAddr,
-    "vnp_Locale" => $vnp_Locale,
-    "vnp_OrderInfo" => $vnp_OrderInfo,
-    "vnp_Returnurl" => $vnp_Returnurl,
-    "vnp_TxnRef" => $vnp_TxnRef,
-    "vnp_SecureHashType" => "SHA256",
-);
-
-// Tạo chuỗi tham số để hash
-$hash_data = http_build_query($vnp_Params);
-$secure_hash = hash_hmac('sha256', $hash_data, $vnp_HashSecret);
-
-// Thêm tham số hash vào mảng
-$vnp_Params['vnp_SecureHash'] = $secure_hash;
-
-// Chuyển hướng người dùng đến URL thanh toán VNPAY
-$vnp_Url .= "?" . http_build_query($vnp_Params);
-
-header("Location: $vnp_Url");
-exit;
-?>
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    date_default_timezone_set('Asia/Ho_Chi_Minh');
+    
+    $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
+    $vnp_TmnCode = "LZQZT9G8";//Mã website tại VNPAY 
+    $vnp_HashSecret = "DWV1B2D4O4L3N6CWF2YKNHMBTMAIKZI4"; //Chuỗi bí mật
+    
+    $vnp_TxnRef = $_POST['order_id']; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
+    $vnp_OrderInfo = $_POST['order_desc'];
+    $vnp_OrderType = $_POST['order_type'];
+    $vnp_Amount = $_POST['amount'] * 100;
+    $vnp_Locale = $_POST['language'];
+    $vnp_BankCode = $_POST['bank_code'];
+    $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+    //Add Params of 2.0.1 Version
+    $vnp_ExpireDate = $_POST['txtexpire'];
+    //Billing
+    $vnp_Bill_Mobile = $_POST['txt_billing_mobile'];
+    $vnp_Bill_Email = $_POST['txt_billing_email'];
+    $fullName = trim($_POST['txt_billing_fullname']);
+    if (isset($fullName) && trim($fullName) != '') {
+        $name = explode(' ', $fullName);
+        $vnp_Bill_FirstName = array_shift($name);
+        $vnp_Bill_LastName = array_pop($name);
+    }
+    $vnp_Bill_Address=$_POST['txt_inv_addr1'];
+    $vnp_Bill_City=$_POST['txt_bill_city'];
+    $vnp_Bill_Country=$_POST['txt_bill_country'];
+    $vnp_Bill_State=$_POST['txt_bill_state'];
+    // Invoice
+    $vnp_Inv_Phone=$_POST['txt_inv_mobile'];
+    $vnp_Inv_Email=$_POST['txt_inv_email'];
+    $vnp_Inv_Customer=$_POST['txt_inv_customer'];
+    $vnp_Inv_Address=$_POST['txt_inv_addr1'];
+    $vnp_Inv_Company=$_POST['txt_inv_company'];
+    $vnp_Inv_Taxcode=$_POST['txt_inv_taxcode'];
+    $vnp_Inv_Type=$_POST['cbo_inv_type'];
+    $inputData = array(
+        "vnp_Version" => "2.1.0",
+        "vnp_TmnCode" => $vnp_TmnCode,
+        "vnp_Amount" => $vnp_Amount,
+        "vnp_Command" => "pay",
+        "vnp_CreateDate" => date('YmdHis'),
+        "vnp_CurrCode" => "VND",
+        "vnp_IpAddr" => $vnp_IpAddr,
+        "vnp_Locale" => $vnp_Locale,
+        "vnp_OrderInfo" => $vnp_OrderInfo,
+        "vnp_OrderType" => $vnp_OrderType,
+        "vnp_ReturnUrl" => $vnp_Returnurl,
+        "vnp_TxnRef" => $vnp_TxnRef,
+        "vnp_ExpireDate"=>$vnp_ExpireDate,
+        "vnp_Bill_Mobile"=>$vnp_Bill_Mobile,
+        "vnp_Bill_Email"=>$vnp_Bill_Email,
+        "vnp_Bill_FirstName"=>$vnp_Bill_FirstName,
+        "vnp_Bill_LastName"=>$vnp_Bill_LastName,
+        "vnp_Bill_Address"=>$vnp_Bill_Address,
+        "vnp_Bill_City"=>$vnp_Bill_City,
+        "vnp_Bill_Country"=>$vnp_Bill_Country,
+        "vnp_Inv_Phone"=>$vnp_Inv_Phone,
+        "vnp_Inv_Email"=>$vnp_Inv_Email,
+        "vnp_Inv_Customer"=>$vnp_Inv_Customer,
+        "vnp_Inv_Address"=>$vnp_Inv_Address,
+        "vnp_Inv_Company"=>$vnp_Inv_Company,
+        "vnp_Inv_Taxcode"=>$vnp_Inv_Taxcode,
+        "vnp_Inv_Type"=>$vnp_Inv_Type
+    );
+    
+    if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+        $inputData['vnp_BankCode'] = $vnp_BankCode;
+    }
+    if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
+        $inputData['vnp_Bill_State'] = $vnp_Bill_State;
+    }
+    
+    //var_dump($inputData);
+    ksort($inputData);
+    $query = "";
+    $i = 0;
+    $hashdata = "";
+    foreach ($inputData as $key => $value) {
+        if ($i == 1) {
+            $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+        } else {
+            $hashdata .= urlencode($key) . "=" . urlencode($value);
+            $i = 1;
+        }
+        $query .= urlencode($key) . "=" . urlencode($value) . '&';
+    }
+    
+    $vnp_Url = $vnp_Url . "?" . $query;
+    if (isset($vnp_HashSecret)) {
+        $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
+        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+    }
+    $returnData = array('code' => '00'
+        , 'message' => 'success'
+        , 'data' => $vnp_Url);
+        if (isset($_POST['redirect'])) {
+            header('Location: ' . $vnp_Url);
+            die();
+        } else {
+            echo json_encode($returnData);
+        }
+        // vui lòng tham khảo thêm tại code demo
+    

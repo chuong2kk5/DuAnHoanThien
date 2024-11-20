@@ -4,6 +4,16 @@ include('../admin/config.php');
 
 $user_id = $_SESSION['user_id'];
 
+if (!isset($_SESSION['user_id'])) {
+    die("Lỗi: Bạn cần đăng nhập để xem thông tin đơn hàng.");
+}
+
+$sql_order = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+ $stmt = $conn->prepare($sql_order); 
+ $stmt->bind_param("i", $user_id); $stmt->execute();
+  $order_result = $stmt->get_result(); 
+  
+
 //   sql user
 
 $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
@@ -187,26 +197,59 @@ $result = $stmt->get_result();
                             </div>
 
                             <div class="form-group active">
-                            <label for="country">Địa Chỉ Của Bạn</label>
-                            <select class="form-control">
-                                <?php
-                                while ($address = $result->fetch_assoc()) {
-                                    echo '<option value="' . htmlspecialchars($address['address_line']) . '">';
-                                    echo htmlspecialchars($address['address_line']) . ', ' . htmlspecialchars($address['city']) . ', ' . htmlspecialchars($address['state']) . ', ' . htmlspecialchars($address['country']);
-                                    echo '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
+                                <label for="country">Địa Chỉ Của Bạn</label>
+                                <select class="form-control">
+                                    <?php
+                                    while ($address = $result->fetch_assoc()) {
+                                        echo '<option value="' . htmlspecialchars($address['address_line']) . '">';
+                                        echo htmlspecialchars($address['address_line']) . ', ' . htmlspecialchars($address['city']) . ', ' . htmlspecialchars($address['state']) . ', ' . htmlspecialchars($address['country']);
+                                        echo '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
 
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade show " id="tab1Id" role="tabpanel">
-                    <!-- Account Information Section -->
-                  <?php include 'thongtindathang.php' ?>
-                </div>
+                <div class="tab-pane fade show" id="tab1Id" role="tabpanel">
+        <!-- Account Information Section -->
+        <div class="card">
+            <div class="card-header">
+                Đơn Hàng
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr class="border-b">
+                            <th style="font-size: 15px;" class="py-3 text-left">Mã Đơn Hàng</th>
+                            <th style="font-size: 15px;" class="py-3 text-left">Ngày Đặt</th>
+                            <th style="font-size: 15px;" class="py-3 text-left">Trạng Thái</th>
+                            <th style="font-size: 15px;" class="py-3 text-left">Tổng Giá Trị</th>
+                            <th style="font-size: 15px;" class="py-3 text-left">Phương Thức Thanh Toán</th>
+                            <th style="font-size: 15px;" class="py-3 text-left">Địa Chỉ Giao Hàng</th>
+                        </tr>
+                    </thead>
+      
+
+                    <tbody>
+                        <?php while ($order = $order_result->fetch_assoc()):  ?>
+                        <tr class="border-b">
+                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['order_id']); ?></td>
+                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['order_date']); ?></td>
+                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['status']); ?></td>
+                            <td style="font-size: 15px;" class="py-3"><?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?></td>
+                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['payment_method']); ?></td>
+                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['address']); ?></td>
+                        </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
+             
+        </div>
+    </div>
 
                 <div class="tab-pane fade show " id="tab2Id" role="tabpanel">
                     <!-- Account Information Section -->
@@ -359,7 +402,7 @@ $result = $stmt->get_result();
                             <label for="country">Quốc gia:</label>
                             <input class="form-control" type="text" id="country" name="country" required>
                         </div>
-                       
+
                         <br>
                         <input class="btn btn-primary" type="submit" value="Thêm Địa Chỉ">
                     </form>

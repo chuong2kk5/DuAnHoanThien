@@ -25,9 +25,7 @@
 
 
 <body>
-    <?php 
-        var_dump($_SESSION);
-    ?>
+  
 
     <div class="container my-5">
         <h2 class="text-center mb-4">Danh Mục Sản Phẩm</h2>

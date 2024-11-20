@@ -1,9 +1,11 @@
 <?php
 session_start();
- var_dump( $_SESSION['user_id']);
 include "cart.php"; 
 ini_set('display_errors', '1'); 
-// Khởi tạo đối tượng Cart
+
+$isLoggedIn = isset($_SESSION['user_id']);
+
+
 $cart = new Cart($_SESSION['user_id'], $conn); 
 
 if (isset($_POST['product_id'])) {
@@ -64,9 +66,26 @@ $total = $cart->getTotal();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ Hàng</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </head>
 <body class="bg-gray-100">
+<?php 
+    if(!$isLoggedIn){
+        echo " <script>
+         Swal.fire({
+             position: 'top-end',
+             icon: 'error',
+             title: 'Vui lòng đăng nhập',
+             showConfirmButton: false,
+             timer: 1500
+           });
+         </script>";
+         exit();
+     }
+?>
+
   <?php include '../include/navbar.php'?>
     <div class="container mx-auto p-6">
       
@@ -127,6 +146,7 @@ $total = $cart->getTotal();
         </div>
     </div>
 
+    <?php include '../include/footer.php'?>
 </body>
 
 </html>

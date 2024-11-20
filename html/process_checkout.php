@@ -11,6 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $cart = new Cart($user_id, $conn);
 $cartItems = $cart->getItems();
+
 $total = $cart->getTotal();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -26,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    $sql = "INSERT INTO orders (user_id, name, phone, address, total, order_date) VALUES (?, ?, ?, ?, ?, NOW())";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssd", $user_id, $name, $phone, $address, $total);
+    $sql = "INSERT INTO orders (user_id, name, phone, address, total, order_date, payment_method) VALUES (?, ?, ?, ?, ?, NOW(), ?)";
+    $stmt = $conn->prepare(query: $sql);
+    $stmt->bind_param("isssds", $user_id, $name, $phone, $address, $total, $payment_method);
 
     $cart = new Cart($user_id, $conn);
     $total = $cart->getTotal();
@@ -42,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("iiid", $order_id, $item['product_id'], $item['quantity'], $item['price']);
             $stmt->execute();
         }
+
 
         $cart->clearCart();
 
