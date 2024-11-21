@@ -26,7 +26,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; height: 80px; padding: 0 100px;">
         <a href="../html/index.php">
             <div class="image-logo" style="margin-right: 30px;">
-                <img src="#" alt="logo">
+                <img style="width: 100px; height: 100px;" src="https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-network-placeholder-png-image_3416659.jpg" alt="logo">
             </div>
         </a>
 

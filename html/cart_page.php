@@ -1,10 +1,16 @@
 <?php
 session_start();
+include "../admin/config.php";
 include "cart.php"; 
 ini_set('display_errors', '1'); 
 
+// Kiểm tra người dùng đã đăng nhập hay chưa
 $isLoggedIn = isset($_SESSION['user_id']);
 
+if(!$isLoggedIn) {
+    header("Location: 404login.php");
+    exit;
+}
 
 $cart = new Cart($_SESSION['user_id'], $conn); 
 
@@ -71,20 +77,7 @@ $total = $cart->getTotal();
 
 </head>
 <body class="bg-gray-100">
-<?php 
-    if(!$isLoggedIn){
-        echo " <script>
-         Swal.fire({
-             position: 'top-end',
-             icon: 'error',
-             title: 'Vui lòng đăng nhập',
-             showConfirmButton: false,
-             timer: 1500
-           });
-         </script>";
-         exit();
-     }
-?>
+
 
   <?php include '../include/navbar.php'?>
     <div class="container mx-auto p-6">

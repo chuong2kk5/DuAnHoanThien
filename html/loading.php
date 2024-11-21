@@ -1,8 +1,14 @@
-<!-- loading.php -->
-<div class="overlay" id="loading">
-    <div class="spinner"></div>
-</div>
+<?php 
+include_once '../admin/config.php';
 
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 <style>
     /* Style cho overlay */
     .overlay {
@@ -36,6 +42,11 @@
         100% { transform: rotate(360deg); }
     }
 </style>
+<body>
+<div class="overlay" id="loading">
+    <div class="spinner"></div>
+</div>
+
 
 <script>
     // Sau khi DOM được tải xong, bắt đầu chạy hiệu ứng fade-out
@@ -45,3 +56,5 @@
         }, 300); // Đợi 1 giây rồi bắt đầu mờ dần
     });
 </script>
+</body>
+</html>

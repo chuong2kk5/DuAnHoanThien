@@ -9,10 +9,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $sql_order = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
- $stmt = $conn->prepare($sql_order); 
- $stmt->bind_param("i", $user_id); $stmt->execute();
-  $order_result = $stmt->get_result(); 
-  
+$stmt = $conn->prepare($sql_order);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$order_result = $stmt->get_result();
+
 
 //   sql user
 
@@ -26,6 +27,12 @@ $user = $user_result->fetch_assoc();
 $sql = "SELECT address_line, city, state, country FROM addresses WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$check_sql = "SELECT * FROM favorites WHERE user_id = ? AND product_id = ?";
+$stmt = $conn->prepare($check_sql);
+$stmt->bind_param("ii", $user_id, $product_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -214,42 +221,48 @@ $result = $stmt->get_result();
                 </div>
 
                 <div class="tab-pane fade show" id="tab1Id" role="tabpanel">
-        <!-- Account Information Section -->
-        <div class="card">
-            <div class="card-header">
-                Đơn Hàng
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr class="border-b">
-                            <th style="font-size: 15px;" class="py-3 text-left">Mã Đơn Hàng</th>
-                            <th style="font-size: 15px;" class="py-3 text-left">Ngày Đặt</th>
-                            <th style="font-size: 15px;" class="py-3 text-left">Trạng Thái</th>
-                            <th style="font-size: 15px;" class="py-3 text-left">Tổng Giá Trị</th>
-                            <th style="font-size: 15px;" class="py-3 text-left">Phương Thức Thanh Toán</th>
-                            <th style="font-size: 15px;" class="py-3 text-left">Địa Chỉ Giao Hàng</th>
-                        </tr>
-                    </thead>
-      
+                    <!-- Account Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            Đơn Hàng
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr class="border-b">
+                                        <th style="font-size: 15px;" class="py-3 text-left">Mã Đơn Hàng</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Ngày Đặt</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Trạng Thái</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Tổng Giá Trị</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Phương Thức Thanh Toán</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Địa Chỉ Giao Hàng</th>
+                                    </tr>
+                                </thead>
 
-                    <tbody>
-                        <?php while ($order = $order_result->fetch_assoc()):  ?>
-                        <tr class="border-b">
-                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['order_id']); ?></td>
-                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['order_date']); ?></td>
-                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['status']); ?></td>
-                            <td style="font-size: 15px;" class="py-3"><?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?></td>
-                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['payment_method']); ?></td>
-                            <td style="font-size: 15px;" class="py-3"><?php echo htmlspecialchars($order['address']); ?></td>
-                        </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            </div>
-             
-        </div>
-    </div>
+
+                                <tbody>
+                                    <?php while ($order = $order_result->fetch_assoc()): ?>
+                                        <tr class="border-b">
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo htmlspecialchars($order['order_id']); ?></td>
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo htmlspecialchars($order['order_date']); ?></td>
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo htmlspecialchars($order['status']); ?></td>
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?></td>
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo htmlspecialchars($order['payment_method']); ?></td>
+                                            <td style="font-size: 15px;" class="py-3">
+                                                <?php echo htmlspecialchars($order['address']); ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
 
                 <div class="tab-pane fade show " id="tab2Id" role="tabpanel">
                     <!-- Account Information Section -->
@@ -326,24 +339,6 @@ $result = $stmt->get_result();
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="/D_A1/image/be-gai1.webp" alt="ảnh-sản-phẩm"
-                                                style="height: 80px;">
-                                            <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
-                                            <p class="text-dsc" style="width: 250px; font-size: 12px">Hoàn háo cho phái
-                                                nam và phát nữ form áo gọn gàng thanh lịch phù hợp
-                                                với mọi gu thời trang</p>
-                                        </td>
-                                        <td>
-                                            <h6> 526.000 vnđ </h6>
-                                        </td>
-                                        <td>
-
-                                            <button type="submit" class="btn btn-primary">Quay lại mua hàng</button>
-                                        </td>
-
-                                    </tr>
                                     <tr>
                                         <td>
                                             <img src="/D_A1/image/be-gai1.webp" alt="ảnh-sản-phẩm"

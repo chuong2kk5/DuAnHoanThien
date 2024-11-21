@@ -33,7 +33,7 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="../image/đồ-nam-2.png" class="card-img-top" alt="Đồ Nam">
+                    <img src="../image/do-nam-2.png" class="card-img-top" alt="Đồ Nam">
                     <div class="card-body">
                         <h5 class="card-title">Đồ Nam</h5>
                         <p class="card-text">Các sản phẩm dành cho nam</p>
@@ -46,7 +46,7 @@
 
             <div class="col">
                 <div class="card h-122">
-                    <img src="../image/đồ-nữ-1.png" class="card-img-top" alt="Đồ Nữ">
+                    <img src="../image/do-nu-2.png" class="card-img-top" alt="Đồ Nữ">
                     <div class="card-body">
                         <h5 class="card-title">Đồ Nữ</h5>
                         <p class="card-text">Các sản phẩm dành cho nữ</p>
