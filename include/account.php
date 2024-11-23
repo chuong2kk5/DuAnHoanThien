@@ -30,12 +30,6 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$check_sql = "SELECT * FROM favorites WHERE user_id = ? AND product_id = ?";
-$stmt = $conn->prepare($check_sql);
-$stmt->bind_param("ii", $user_id, $product_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
 
 
 ?>
@@ -244,17 +238,23 @@ $result = $stmt->get_result();
                                     <?php while ($order = $order_result->fetch_assoc()): ?>
                                         <tr class="border-b">
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['order_id']); ?></td>
+                                                <?php echo htmlspecialchars($order['order_id']); ?>
+                                            </td>
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['order_date']); ?></td>
+                                                <?php echo htmlspecialchars($order['order_date']); ?>
+                                            </td>
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['status']); ?></td>
+                                                <?php echo htmlspecialchars($order['status']); ?>
+                                            </td>
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?></td>
+                                                <?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?>
+                                            </td>
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['payment_method']); ?></td>
+                                                <?php echo htmlspecialchars($order['payment_method']); ?>
+                                            </td>
                                             <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['address']); ?></td>
+                                                <?php echo htmlspecialchars($order['address']); ?>
+                                            </td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
@@ -324,7 +324,17 @@ $result = $stmt->get_result();
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show " id="tab3Id" role="tabpanel">
+                <div class="tab-pane fade show" id="tab3Id" role="tabpanel">
+                    <?php
+                    $sql = "SELECT p.product_id, p.name, p.price, p.image_path 
+                     FROM favorites f
+                     JOIN products p ON f.product_id = p.product_id
+                     WHERE f.user_id = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    ?>
                     <div class="card">
                         <div class="card-header">
                             Sản phẩm yêu thích
@@ -339,32 +349,41 @@ $result = $stmt->get_result();
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="/D_A1/image/be-gai1.webp" alt="ảnh-sản-phẩm"
-                                                style="height: 80px;">
-                                            <h4 class="text-title">Áo đẹp polo Nam Nữ</h4>
-                                            <p class="text-dsc" style="width: 300px;">Hoàn háo cho phái nam và phát nữ
-                                                form áo gọn gàng thanh lịch phù hợp
-                                                với mọi gu thời trang</p>
-                                        </td>
-                                        <td>
-                                            <h6> 526.000 vnđ </h6>
-                                        </td>
-                                        <td style="display: flex">
-
-                                            <button type="submit" class="btn btn-primary">Quay lại mua hàng</button>
-                                        </td>
-
-                                    </tr>
+                                    <?php if ($result->num_rows > 0): ?>
+                                        <?php while ($row = $result->fetch_assoc()): ?>
+                                            <tr>
+                                                <td>
+                                                    <img src="<?php echo $row['image_path']; ?>" alt="ảnh-sản-phẩm"
+                                                        style="height: 80px;">
+                                                    <h4 class="text-title"><?php echo $row['name']; ?></h4>
+                                                </td>
+                                                <td>
+                                                    <h6><?php echo number_format($row['price'], 0, ',', '.'); ?> VNĐ</h6>
+                                                </td>
+                                                <td style="display: flex;">
+                                                    <form method="POST" action="remove_favorite.php"
+                                                        onsubmit="return confirmDelete();" style="margin-right: 10px;">
+                                                        <input type="hidden" name="product_id"
+                                                            value="<?php echo $row['product_id']; ?>">
+                                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                                    </form>
+                                                    <a href="../html/details.php?product_id=<?php echo $row['product_id']; ?>"
+                                                        class="btn btn-primary">
+                                                        Xem sản phẩm
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="3" class="text-center">Bạn chưa thêm sản phẩm nào vào danh sách yêu
+                                                thích.</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer text-muted">
-                            Sản phẩm bãn đã yêu thích
-                        </div>
                     </div>
-
                 </div>
                 <!-- Other Tabs (like tab1Id, tab2Id) -->
                 <!-- Add content for each tab if needed -->
@@ -410,7 +429,11 @@ $result = $stmt->get_result();
 
     <?php include '../include/footer.php'; ?>
 
-
+    <script>
+        function confirmDelete() {
+            return confirm('Bạn có muốn xóa sản phẩm này khỏi danh sách yêu thích?');
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>

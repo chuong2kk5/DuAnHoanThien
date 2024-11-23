@@ -6,45 +6,28 @@ if (!$isLoggedIn) {
     echo "
    <script>
        Swal.fire('Vui lòng đăng nhập!');
-   </script>;      
-   ";
+   </script>";
     exit;
 }
 
-// Kiểm tra khi form yêu thích được gửi
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $product_id = $_POST['product_id'];
+// Cấu hình phân trang
+$limit = 4; // Số sản phẩm mỗi trang
+$page = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại
+$offset = ($page - 1) * $limit; // Tính toán vị trí bắt đầu của dữ liệu
 
-    // Kiểm tra sản phẩm đã có trong danh sách yêu thích chưa
-    $check_sql = "SELECT * FROM favorites WHERE user_id = ? AND product_id = ?";
-    $stmt = $conn->prepare($check_sql);
-    $stmt->bind_param("ii", $user_id, $product_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+// Truy vấn lấy danh sách sản phẩm với phân trang
+$sql = "SELECT * FROM products LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $limit, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    if ($result->num_rows === 0) {
-        // Thêm sản phẩm vào danh sách yêu thích
-        $insert_sql = "INSERT INTO favorites (user_id, product_id) VALUES (?, ?)";
-        $stmt = $conn->prepare($insert_sql);
-        $stmt->bind_param("ii", $user_id, $product_id);
-        if ($stmt->execute()) {
-           
-        } else {
-            echo "<script>alert('Lỗi khi thêm sản phẩm vào cơ sở dữ liệu.');</script>";
-        }
-    } else {
-        // Xóa sản phẩm khỏi danh sách yêu thích
-        $delete_sql = "DELETE FROM favorites WHERE user_id = ? AND product_id = ?";
-        $stmt = $conn->prepare($delete_sql);
-        $stmt->bind_param("ii", $user_id, $product_id);
-        if ($stmt->execute()) {
-            
-        } else {
-            echo "<script>alert('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích.');</script>";
-        }
-    }
-}
+// Truy vấn để lấy tổng số sản phẩm
+$sql_count = "SELECT COUNT(*) AS total FROM products";
+$count_result = $conn->query($sql_count);
+$row_count = $count_result->fetch_assoc();
+$total_products = $row_count['total'];
+$total_pages = ceil($total_products / $limit); // Tổng số trang
 ?>
 
 <!DOCTYPE html>
@@ -56,9 +39,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     <title>Sản Phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- 
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
 
+        .pagination-link {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
 
+        .pagination-link:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination-link.active {
+            background-color: #0056b3;
+            font-weight: bold;
+        }
+
+        .pagination-info {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .pagination-link:disabled {
+            background-color: #ccc;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -67,13 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php
-            // Lấy danh sách sản phẩm từ cơ sở dữ liệu
-            $sql = "SELECT * FROM products";
-            $result = $conn->query($sql);
-
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    // Kiểm tra xem sản phẩm có trong danh sách yêu thích của người dùng không
                     $user_id = $_SESSION['user_id'];
                     $check_fav_sql = "SELECT * FROM favorites WHERE user_id = ? AND product_id = ?";
                     $stmt = $conn->prepare($check_fav_sql);
@@ -82,9 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
                     $fav_result = $stmt->get_result();
                     $is_favorite = $fav_result->num_rows > 0;
                     ?>
+
                     <div class="bg-white rounded-lg overflow-hidden">
                         <div class="relative">
-                            <a href="details.php?id=<?php echo $row['product_id']; ?>">
+                            <a href="details.php?product_id=<?php echo $row['product_id']; ?>">
                                 <img class="w-full h-64 object-cover" src="<?php echo $row['image_path']; ?>"
                                     alt="<?php echo $row['name']; ?>">
                             </a>
@@ -119,13 +133,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
                                 Ngay</button>
                         </div>
                     </div>
-                    <?php
-                }
+
+                <?php }
             } else {
                 echo "<p class='col-span-full text-center'>Không có sản phẩm nào</p>";
             }
             ?>
         </div>
+
+        <!-- Phân trang -->
+        <!-- Phân trang -->
+        <div class="pagination mt-8 text-center">
+            <!-- Các nút số trang -->
+            <?php
+            $start_page = max(1, $page - 2); // Tính toán trang bắt đầu (2 trang trước)
+            $end_page = min($total_pages, $page + 2); // Tính toán trang kết thúc (2 trang sau)
+            
+            for ($i = $start_page; $i <= $end_page; $i++): ?>
+                <a href="?page=<?php echo $i; ?>" class="pagination-link <?php echo ($i == $page) ? 'active' : ''; ?>">
+                    <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+            <!-- Nút "Trang tiếp theo" -->
+        </div>
+
+
+
     </div>
 </body>
 

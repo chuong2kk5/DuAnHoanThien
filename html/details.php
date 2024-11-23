@@ -37,7 +37,7 @@ while ($variant = $variants_result->fetch_assoc()) { // Lưu tất cả biến t
             <div class="col-md-6">
                 <h1 class="display-4"><?php echo $product['name']; ?></h1>
                 <p class="lead"><?php echo $product['description']; ?></p>
-                <img src="<?php echo $product['image_path']; ?>" alt="Product Image" class="img-fluid">
+                <!-- <img src="<?php echo $product['image_path']; ?>" alt="Product Image" class="img-fluid"> -->
             </div>
             <div class="col-md-6">
                 <h2 class="h4">Price: $<span class="price"><?php echo $product['price']; ?></span></h2>
@@ -77,6 +77,7 @@ while ($variant = $variants_result->fetch_assoc()) { // Lưu tất cả biến t
             </div>
         </div>
     </div>
+    <?php include '../include/comm.php'; ?>
 
     <?php include '../include/footer.php'; ?>
 
