@@ -18,6 +18,7 @@ session_start();
         <?php include '../include/navbar.php' ?>
         <?php include '../include/slide.php' ?>
         <?php include '../include/category.php' ?>
+        <?php include '../include/products.php' ?>
         <?php include '../include/footer.php' ?>
     </main>
 

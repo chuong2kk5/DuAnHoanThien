@@ -199,15 +199,18 @@ $result = $stmt->get_result();
 
                             <div class="form-group active">
                                 <label for="country">Địa Chỉ Của Bạn</label>
-                                <select class="form-control">
-                                    <?php
-                                    while ($address = $result->fetch_assoc()) {
-                                        echo '<option value="' . htmlspecialchars($address['address_line']) . '">';
-                                        echo htmlspecialchars($address['address_line']) . ', ' . htmlspecialchars($address['city']) . ', ' . htmlspecialchars($address['state']) . ', ' . htmlspecialchars($address['country']);
-                                        echo '</option>';
-                                    }
-                                    ?>
+                                <select class="form-control" id="address_list" name="address_list">
+                                    <?php while ($address  = $result->fetch_assoc()) { ?>
+                                        <option value="">
+                                            <?php echo htmlspecialchars($address['address_line']) . ', ' .
+                                                htmlspecialchars($address['city']) . ', ' .
+                                                htmlspecialchars($address['state']) . ', ' .
+                                                htmlspecialchars($address['country']); ?>
+                                        </option>
+                                         
+                                    <?php } ?>
                                 </select>
+
                             </div>
 
                         </div>

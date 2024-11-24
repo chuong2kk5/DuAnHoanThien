@@ -1,22 +1,25 @@
 <?php
- session_start();
- require_once "config.php";
- 
- $sql_products = "SELECT * FROM products";
- 
- 
- $result_products = $conn->query($sql_products);
-  
- 
- $sql = "SELECT * FROM products";
- $resuilt = $conn->query($sql_products);
- $sql_categories = "SELECT * FROM categories";
- $resuilt = $conn->query($sql_categories);
- 
- $sql = "SELECT * FROM categories";
- $result_categories = $conn->query($sql_categories);
- 
+session_start();
+require_once "config.php";
+
+$limit = 3;
+
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$sql_products = "SELECT * FROM products LIMIT $limit OFFSET $offset";
+$result_products = $conn->query($sql_products);
+
+$sql_count_products = "SELECT COUNT(*) AS total FROM products";
+$result_count = $conn->query($sql_count_products);
+$count_row = $result_count->fetch_assoc();
+$total_products = $count_row['total'];
+$total_pages = ceil($total_products / $limit);
+
+$sql_categories = "SELECT * FROM categories";
+$result_categories = $conn->query($sql_categories);
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -265,6 +268,35 @@
                     ?>
                 </tbody>
             </table>
+            <nav>
+    <ul class="pagination">
+        <!-- Trang đầu và trang trước -->
+        <?php if ($page > 1): ?>
+            <li class="page-item">
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page - 1; ?>">«</a>
+            </li>
+        <?php endif; ?>
+
+        <!-- Hiển thị các số trang -->
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <!-- Trang tiếp theo và trang cuối -->
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page + 1; ?>">»</a>
+            </li>
+            <li class="page-item">
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
+
         </div>
 
         <script>

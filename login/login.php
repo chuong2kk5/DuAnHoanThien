@@ -69,15 +69,14 @@
                         <input id="password_signup" name="password_signup" type="password" placeholder="Password"
                             required />
                     </div>
-
-                    <!-- Role selection for admin/customer -->
+<!-- ROLE class
                     <div class="role">
                         <i class="fas fa-user-tag"></i>
                         <select id="role" name="role" required>
                             <option value="customer" selected>Customer</option>
                             <option value="admin">Admin</option>
                         </select>
-                    </div>
+                    </div> -->
 
 
                     <div class="g-recaptcha" data-sitekey="6LcdoTgqAAAAACvJOGXqJTgLFHccGFmpfFLXdbcF"></div>
@@ -94,7 +93,7 @@
                     <p>Sign up and discover a great amount of new opportunities!</p>
                     <button class="btn transparent" id="sign-up-btn">Sign up</button>
                 </div>
-                <img src="" class="image" alt="" />
+                <img src="image/be-trai-2.png" class="image" alt="" />
             </div>
             <div class="panel right-panel">
                 <div class="content">
@@ -102,7 +101,7 @@
                     <p>Sign in now to see our great music deals</p>
                     <button class="btn transparent" id="sign-in-btn">Sign in</button>
                 </div>
-                <img src="../img/register.svg" class="image" alt="" />
+                <img src="image/be-trai-2.png" class="image" alt="" />
             </div>
         </div>
     </div>
