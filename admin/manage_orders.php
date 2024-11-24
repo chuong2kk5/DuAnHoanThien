@@ -168,7 +168,7 @@ if (!$result) {
                                     <option value="completed" <?php if ($row['status'] == 'completed')
                                         echo 'selected'; ?>>
                                         Hoàn thành</option>
-                                    <option value="canceled" <?php if ($row['status'] == 'canceled')
+                                    <option value="cancelled" <?php if ($row['status'] == 'cancelled')
                                         echo 'selected'; ?>>Hủy
                                         bỏ</option>
                                 </select>

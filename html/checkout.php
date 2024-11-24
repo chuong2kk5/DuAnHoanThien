@@ -56,7 +56,9 @@ $result = $stmt->get_result();
                                 <td class="py-4"><?php echo htmlspecialchars($item['name']); ?></td>
                                 <td class="py-4"><?php echo number_format($item['price'], 0, ',', '.') . 'đ'; ?></td>
                                 <td class="py-4"><?php echo htmlspecialchars($item['quantity']); ?></td>
-                                <td class="py-4"><?php echo number_format($item['price'] * $item['quantity'], 0, ',', '.') . 'đ'; ?></td>
+                                <td class="py-4">
+                                    <?php echo number_format($item['price'] * $item['quantity'], 0, ',', '.') . 'đ'; ?>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -82,7 +84,8 @@ $result = $stmt->get_result();
                         <input type="text" name="phone" id="phone" required class="mt-1 p-2 border rounded w-full">
                     </div>
                     <div class="mb-4">
-                        <label for="address_select" class="block text-sm font-medium text-gray-700">Chọn địa chỉ giao hàng</label>
+                        <label for="address_select" class="block text-sm font-medium text-gray-700">Chọn địa chỉ giao
+                            hàng</label>
                         <select name="address_select" id="address_select" class="form-control w-full p-2 border rounded">
                             <option value="">Chọn địa chỉ giao hàng</option>
                             <?php
@@ -92,30 +95,33 @@ $result = $stmt->get_result();
                                 echo '</option>';
                             }
                             ?>
-                        </select>
-                    </div>
+                            <div class="mt-6">
+                                <h3 class="text-xl font-semibold">Chọn phương thức thanh toán</h3>
+                                <div class="mt-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="payment_method" value="COD" checked
+                                            class="form-radio text-blue-500">
+                                        <span class="ml-2">Thanh toán khi nhận hàng</span>
+                                    </label>
+                                </div>
+                                <div class="mt-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="payment_method" value="VNPAY"
+                                            class="form-radio text-blue-500">
+                                        <span class="ml-2">Thanh toán qua chuyển khoản (VNPAY)</span>
+                                    </label>
+                                </div>
+                            </div>
 
-                    <div class="mt-6">
-                        <h3 class="text-xl font-semibold">Chọn phương thức thanh toán</h3>
-                        <div class="mt-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="payment_method" value="COD" checked class="form-radio text-blue-500">
-                                <span class="ml-2">Thanh toán khi nhận hàng</span>
-                            </label>
-                        </div>
-                        <div class="mt-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="payment_method" value="VNPAY" class="form-radio text-blue-500">
-                                <span class="ml-2">Thanh toán qua chuyển khoản (VNPAY)</span>
-                            </label>
-                        </div>
-                    </div>
+                            <!-- Thêm tổng tiền vào POST -->
+                            <input type="hidden" name="total" value="<?php echo $total; ?>">
 
-                    <div class="mt-6">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
-                            Xác nhận thanh toán
-                        </button>
-                    </div>
+                            <div class="mt-6">
+                                <button type="submit"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                                    Xác nhận thanh toán
+                                </button>
+                            </div>
                 </form>
             </div>
         <?php } ?>

@@ -20,9 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $phone = $_POST['phone'];
     $address = $_POST['address_select'];
     $payment_method = $_POST['payment_method'];
+    $total = $_POST['total']; // Lấy tổng tiền từ form
 
     if ($payment_method == 'VNPAY') {
-        
+        // Nếu chọn VNPAY, chuyển hướng đến trang thanh toán VNPAY
         header('Location: vnpay_payment.php?total=' . $total);
         exit;
     }

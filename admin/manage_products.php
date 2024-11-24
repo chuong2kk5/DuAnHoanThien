@@ -4,7 +4,7 @@ require_once "config.php";
 
 $limit = 3;
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 $sql_products = "SELECT * FROM products LIMIT $limit OFFSET $offset";
@@ -147,7 +147,8 @@ $result_categories = $conn->query($sql_categories);
                             </div>
                             <div class="form-group">
                                 <label for="image">Tải lên hình ảnh</label>
-                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                                    required>
                             </div>
                             <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
                         </form>
@@ -156,6 +157,8 @@ $result_categories = $conn->query($sql_categories);
                 </div>
             </div>
         </div>
+
+      
 
         <!-- Modal Sửa sản phẩm -->
         <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog"
@@ -269,34 +272,33 @@ $result_categories = $conn->query($sql_categories);
                 </tbody>
             </table>
             <nav>
-    <ul class="pagination">
-        <!-- Trang đầu và trang trước -->
-        <?php if ($page > 1): ?>
-            <li class="page-item">
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page=<?php echo $page - 1; ?>">«</a>
-            </li>
-        <?php endif; ?>
+                <ul class="pagination">
+                    <!-- Trang đầu và trang trước -->
+                    <?php if ($page > 1): ?>
+                        <li class="page-item">
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=<?php echo $page - 1; ?>">«</a>
+                        </li>
+                    <?php endif; ?>
 
-        <!-- Hiển thị các số trang -->
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-            </li>
-        <?php endfor; ?>
+                    <!-- Hiển thị các số trang -->
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
 
-        <!-- Trang tiếp theo và trang cuối -->
-        <?php if ($page < $total_pages): ?>
-            <li class="page-item">
-                <a class="page-link" href="?page=<?php echo $page + 1; ?>">»</a>
-            </li>
-            <li class="page-item">
-            </li>
-        <?php endif; ?>
-    </ul>
-</nav>
-
+                    <!-- Trang tiếp theo và trang cuối -->
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=<?php echo $page + 1; ?>">»</a>
+                        </li>
+                        <li class="page-item">
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
         </div>
 
         <script>
@@ -329,6 +331,8 @@ $result_categories = $conn->query($sql_categories);
                         });
                     });
             }
+
+
         </script>
 
         <!-- Bao gồm các thư viện JavaScript cần thiết -->
@@ -336,6 +340,6 @@ $result_categories = $conn->query($sql_categories);
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    </body>
+</body>
 
-    </html>
+</html>

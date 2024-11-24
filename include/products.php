@@ -11,7 +11,7 @@ if (!$isLoggedIn) {
 }
 
 // Cấu hình phân trang
-$limit = 4; // Số sản phẩm mỗi trang
+$limit = 8; // Số sản phẩm mỗi trang
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại
 $offset = ($page - 1) * $limit; // Tính toán vị trí bắt đầu của dữ liệu
 
@@ -141,13 +141,10 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
             ?>
         </div>
 
-        <!-- Phân trang -->
-        <!-- Phân trang -->
         <div class="pagination mt-8 text-center">
-            <!-- Các nút số trang -->
             <?php
-            $start_page = max(1, $page - 2); // Tính toán trang bắt đầu (2 trang trước)
-            $end_page = min($total_pages, $page + 2); // Tính toán trang kết thúc (2 trang sau)
+            $start_page = max(1, $page - 2);  
+            $end_page = min($total_pages, $page + 2);  
             
             for ($i = $start_page; $i <= $end_page; $i++): ?>
                 <a href="?page=<?php echo $i; ?>" class="pagination-link <?php echo ($i == $page) ? 'active' : ''; ?>">
