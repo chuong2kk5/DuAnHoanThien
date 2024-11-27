@@ -17,7 +17,6 @@ session_start();
         <?php include '../include/header.php' ?>
         <?php include '../include/navbar.php' ?>
         <?php include '../include/slide.php' ?>
-        <?php include '../include/user_coupons.php' ?>
         <?php include '../include/category.php' ?>
         <?php include '../include/products.php' ?>
         <?php include '../include/footer.php' ?>

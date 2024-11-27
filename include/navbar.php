@@ -240,10 +240,11 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     </div>
                 </li>
             </ul>
-            <form class="d-flex" style="margin-right: 30px;">
-                <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <form class="d-flex" style="margin-right: 30px;" action="../html/search.php" method="GET">
+    <input class="form-control mr-2" type="search" name="query" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
         </div>
 
         <ul class="navbar-nav">
