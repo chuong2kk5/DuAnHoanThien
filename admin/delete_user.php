@@ -46,23 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt_check_cart->fetch();
             $stmt_check_cart->close();
 
-            if ($cart_count > 0) {
-                // Nếu người dùng có sản phẩm trong giỏ hàng, xóa các sản phẩm trong giỏ hàng
-                $sql_delete_cart = "DELETE FROM carts WHERE user_id = ?";
-                $stmt_delete_cart = $conn->prepare($sql_delete_cart);
-                $stmt_delete_cart->bind_param("i", $user_id);
-                $stmt_delete_cart->execute();
-                $stmt_delete_cart->close();
-            }
-
-            
-             $sql_check_cart_items = "SELECT COUNT(*) FROM cart_items WHERE user_id = ?";
-            $stmt_check_cart_items = $conn->prepare($sql_check_cart_items);
-            $stmt_check_cart_items->bind_param("i", $user_id);
-            $stmt_check_cart_items->execute();
-            $stmt_check_cart_items->bind_result($cart_items_count);
-            $stmt_check_cart_items->fetch();
-            $stmt_check_cart_items->close();
+      
 
             if ($cart_items_count > 0) {
                 // Nếu người dùng có sản phẩm trong giỏ hàng, xóa các sản phẩm trong giỏ hàng
@@ -79,14 +63,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("i", $user_id);
 
             if ($stmt->execute()) {
-                $message = "Người dùng và các dữ liệu liên quan (địa chỉ, giỏ hàng) đã được xóa thành công!";
+                echo "
+        <script>
+            Swal.fire({
+                title: 'Thành công!',
+                text: 'Người dùng và các dữ liệu liên quan (địa chỉ, giỏ hàng) đã được xóa thành công!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'manage_users.php'; // Chuyển hướng đến danh sách người dùng
+            });
+        </script>";
             } else {
-                $message = "Xóa người dùng không thành công. Vui lòng thử lại!";
+                echo "
+                <script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Xóa người dùng không thành công. Vui lòng thử lại!',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(function() {
+                        window.location.href = 'manage_users.php'; // Chuyển hướng đến danh sách người dùng
+                    });
+                </script>";
             }
             $stmt->close();
         }
     } else {
-        $message = "Không tìm thấy người dùng";
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Không tìm thấy người dùng!',
+                text: 'Người dùng cần xóa không tồn tại hoặc đã bị xóa.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = 'manage_users.php'; // Chuyển hướng đến danh sách người dùng
+            });
+        </script>";
     }
 
     // Chuyển hướng với thông báo

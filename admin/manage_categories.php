@@ -71,12 +71,13 @@ error_reporting(E_ALL);
     <div class="sidebar">
         <h2 class="text-center">Welcome admin</h2>
         <ul class="list-group">
-            <li class="list-group-item bg-dark"><a href="index.php">Trang chủ</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_products.php">Quản lý sản phẩm</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_users.php">Quản lý người dùng</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_categories.php">Quản lý danh mục</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_coupons.php">Mã giảm giá</a></li>
+            <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
+            <li class="list-group-item"><a href="manage_products.php">Quản lý sản phẩm</a></li>
+            <li class="list-group-item"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
+            <li class="list-group-item"><a href="manage_users.php">Quản lý người dùng</a></li>
+            <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
+            <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
+            <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
             <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
         </ul>
     </div>

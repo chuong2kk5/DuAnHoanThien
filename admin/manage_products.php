@@ -87,19 +87,24 @@ $result_categories = $conn->query($sql_categories);
     <div class="sidebar">
         <h2 class="text-center">Bảng điều khiển Admin</h2>
         <ul class="list-group">
-            <li class="list-group-item bg-dark"><a href="index.php">Trang chủ</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_products.php">Quản lý sản phẩm</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_users.php">Quản lý người dùng</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_categories.php">Quản lý danh mục</a></li>
-            <li class="list-group-item bg-dark"><a href="manage_coupons.php">Mã giảm giá</a></li>
+            <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
+            <li class="list-group-item"><a href="manage_products.php">Quản lý sản phẩm</a></li>
+            <li class="list-group-item"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
+            <li class="list-group-item"><a href="manage_users.php">Quản lý người dùng</a></li>
+            <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
+            <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
+            <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
             <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
         </ul>
     </div>
 
     <div class="content">
         <h1>Quản lý sản phẩm</h1>
+        <?php if (isset($_GET['message'])): ?>
+                            <p class="message"><?php echo htmlspecialchars($_GET['message']); ?></p>
+                        <?php endif; ?>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addProductModal">Thêm sản phẩm</button>
+        <a href="add_image.php" class="btn btn-warning">Thêm ảnh</a>
         <!-- Modal Thêm sản phẩm -->
         <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
             aria-hidden="true">
@@ -108,9 +113,7 @@ $result_categories = $conn->query($sql_categories);
                     <div class="modal-header">
                         <h5 class="modal-title" id="addProductModalLabel">Thêm sản phẩm mới</h5>
                         <!-- messsage thong bao -->
-                        <?php if (isset($_GET['message'])): ?>
-                            <p class="message"><?php echo htmlspecialchars($_GET['message']); ?></p>
-                        <?php endif; ?>
+                       
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -147,7 +150,7 @@ $result_categories = $conn->query($sql_categories);
                             </div>
                             <div class="form-group">
                                 <label for="image">Tải lên hình ảnh</label>
-                                <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                                <input type="file" class="form-control" id="image" name="image" multiple  accept="image/*"
                                     required>
                             </div>
                             <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>

@@ -2,6 +2,14 @@
 session_start();
 require_once "config.php";
 
+if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+
+    echo "<script>alert('Chào mừng Admin!')</script>";
+} else {
+    echo "<script>alert('bạn không có quyền truy cập trang này, vui lòng đăng nhập')</script>";
+    echo "<script>window.location.href = 'login.php';</script>";
+    exit();
+}
 
 // Truy vấn tổng số sản phẩm, đơn hàng, người dùng
 $sql_products = "SELECT COUNT(*) AS total_products FROM products";

@@ -69,14 +69,15 @@
                         <input id="password_signup" name="password_signup" type="password" placeholder="Mật khẩu"
                             required />
                     </div>
-<!-- ROLE class
-                    <div class="role">
+<!-- ROLE class-->
+                    <div class="">
                         <i class="fas fa-user-tag"></i>
                         <select id="role" name="role" required>
                             <option value="customer" selected>Customer</option>
-                            <option value="admin">Admin</option>
+                            <option value="customer">customer</option>
                         </select>
-                    </div> -->
+                    </div> 
+
                     <div class="g-recaptcha" data-sitekey="6LcdoTgqAAAAACvJOGXqJTgLFHccGFmpfFLXdbcF"></div>
 
                     <input type="submit" class="btn" value="Sign up" />

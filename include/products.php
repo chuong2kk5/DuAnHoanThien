@@ -10,6 +10,10 @@ if (!$isLoggedIn) {
     exit;
 }
 
+// favorite 
+
+
+
 // Cấu hình phân trang
 $limit = 8; // Số sản phẩm mỗi trang
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại
@@ -115,6 +119,7 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
                                     </svg>
                                 </button>
                             </form>
+
                         </div>
                         <div class="p-3">
                             <h3 class="text-lg font-semibold text-gray-800"><?php echo $row["name"]; ?></h3>
@@ -128,9 +133,10 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
                                 <button class="btn btn-success" type="submit">Thêm vào Giỏ</button>
                             </form>
 
-                            <button
-                                class="flex items-center bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600 transition-colors duration-200">Mua
-                                Ngay</button>
+                            <a href="details.php?product_id=<?php echo $row['product_id']; ?>" class="flex items-center bg-blue-500 text-white px-2 py-1 round
+                            ed-lg hover:bg-blue-600 transition-colors duration-200">Mua Ngay</a>
+                             
+                                 
                         </div>
                     </div>
 
@@ -143,9 +149,9 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
 
         <div class="pagination mt-8 text-center">
             <?php
-            $start_page = max(1, $page - 2);  
-            $end_page = min($total_pages, $page + 2);  
-            
+            $start_page = max(1, $page - 2);
+            $end_page = min($total_pages, $page + 2);
+
             for ($i = $start_page; $i <= $end_page; $i++): ?>
                 <a href="?page=<?php echo $i; ?>" class="pagination-link <?php echo ($i == $page) ? 'active' : ''; ?>">
                     <?php echo $i; ?>
