@@ -114,7 +114,7 @@ $total_users = $row_users['total_users'];
             <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
             <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
             <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
-            <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
+            <li class="list-group-item bg-dark"><a href="../login/logout.php">Đăng xuất</a></li>
         </ul>
     </div>
 

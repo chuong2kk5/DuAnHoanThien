@@ -28,22 +28,20 @@ $stmt->bind_result($stock);
 $stmt->fetch();
 $stmt->close();
 
-
-// Lấy các biến thể từ bảng variants, sắp xếp theo giá tăng dần
-// $variants_stmt = $conn->prepare("SELECT v.variant_id, v.product_id, v.size, v.color, v.price, v.stock
-//                                  FROM product_variants v
-//                                  WHERE v.product_id = ?
-//                                  ORDER BY v.price ASC");
-// $variants_stmt->bind_param("i", $product_id);  // $product_id là ID của sản phẩm bạn muốn lấy biến thể
-// $variants_stmt->execute();
-// $variants_result = $variants_stmt->get_result();
-
-
-// Mảng lưu các biến thể với giá và số lượng
 $variants = [];
 while ($variant = $variants_result->fetch_assoc()) {
     $variants[] = $variant;
 }
+
+// comment 
+$comments_sql = "SELECT c.content, c.created_at, u.username AS user_username 
+                 FROM comments c
+                 JOIN users u ON c.user_id = u.user_id
+                 WHERE c.product_id = $product_id
+                 ORDER BY c.created_at DESC";
+$comments_result = mysqli_query($conn, $comments_sql);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +55,15 @@ while ($variant = $variants_result->fetch_assoc()) {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
+        .text-muted {
+            color: #777;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 0;
+        }
+
         .image-container {
             display: flex;
             /* Sử dụng Flexbox */
@@ -75,6 +82,103 @@ while ($variant = $variants_result->fetch_assoc()) {
             /* Đặt chiều cao của ảnh */
             object-fit: cover;
             /* Đảm bảo ảnh không bị méo và sẽ được cắt cho vừa khung */
+        }
+
+        /* General Styles */
+        .comment-container {
+            width: 100%;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .add-comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-textarea {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 20%;
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        .submit-btn:hover {
+            background-color: blueviolet;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-comments {
+            color: #888;
+            font-style: italic;
+        }
+
+        .comments-list {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .comment-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .comment-content {
+            font-size: 14px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .star-rating {
+            color: #ff9800;
+        }
+
+        .star {
+            font-size: 18px;
+            margin-right: 2px;
         }
     </style>
 </head>
@@ -249,7 +353,7 @@ while ($variant = $variants_result->fetch_assoc()) {
     </div>
     <hr />
     <div class="container mx-auto p-6">
-        <h3 class="text-3xl font-bold text-center mb-8">Gợi ý mua hàng</h3>
+        <h3 class="text-3xl font-bold text-center mb-8">Đánh giá sản phẩm</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php
             // Kiểm tra xem có sản phẩm nào không
@@ -331,6 +435,41 @@ while ($variant = $variants_result->fetch_assoc()) {
         </div>
     </div>
 
+    <!-- comment form -->
+    <!-- Form Đánh giá -->
+    <div class="comment-container">
+        <form action="add_comment.php?product_id=<?php echo $product_id; ?>" method="POST" class="add-comment-form">
+            <textarea name="comment" class="comment-textarea" rows="4" placeholder="Viết Đánh giá của bạn..."
+                required></textarea>
+            <button type="submit" class="submit-btn">Gửi Đánh giá</button>
+        </form>
+
+        <!-- Hiển thị Đánh giá -->
+        <div class="comments-section">
+            <?php if (mysqli_num_rows($comments_result) == 0) { ?>
+                <p class="no-comments">Chưa có Đánh giá nào. Hãy là người đầu tiên Đánh giá!</p>
+            <?php } else { ?>
+                <ul class="comments-list">
+                    <?php while ($comment = mysqli_fetch_assoc($comments_result)) { ?>
+                        <li class="comment-item">
+                            <div class="comment-header">
+                                <h4 class="user-name"><?php echo htmlspecialchars($comment['user_username']); ?></h4>
+                                <small class="comment-time"><?php echo $comment['created_at']; ?></small>
+                            </div>
+                            <p class="comment-content"><?php echo htmlspecialchars($comment['content']); ?></p>
+                            <div class="star-rating">
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php } ?>
+        </div>
+    </div>
 
 
     <?php include '../include/footer.php'; ?>

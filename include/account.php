@@ -200,14 +200,14 @@ $result = $stmt->get_result();
                             <div class="form-group active">
                                 <label for="country">Địa Chỉ Của Bạn</label>
                                 <select class="form-control" id="address_list" name="address_list">
-                                    <?php while ($address  = $result->fetch_assoc()) { ?>
+                                    <?php while ($address = $result->fetch_assoc()) { ?>
                                         <option value="">
                                             <?php echo htmlspecialchars($address['address_line']) . ', ' .
                                                 htmlspecialchars($address['city']) . ', ' .
                                                 htmlspecialchars($address['state']) . ', ' .
                                                 htmlspecialchars($address['country']); ?>
                                         </option>
-                                         
+
                                     <?php } ?>
                                 </select>
 
@@ -233,34 +233,52 @@ $result = $stmt->get_result();
                                         <th style="font-size: 15px;" class="py-3 text-left">Tổng Giá Trị</th>
                                         <th style="font-size: 15px;" class="py-3 text-left">Phương Thức Thanh Toán</th>
                                         <th style="font-size: 15px;" class="py-3 text-left">Địa Chỉ Giao Hàng</th>
+                                        <th style="font-size: 15px;" class="py-3 text-left">Hành Động</th>
+
                                     </tr>
                                 </thead>
 
 
                                 <tbody>
-                                    <?php while ($order = $order_result->fetch_assoc()): ?>
-                                        <tr class="border-b">
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['order_id']); ?>
-                                            </td>
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['order_date']); ?>
-                                            </td>
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['status']); ?>
-                                            </td>
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?>
-                                            </td>
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['payment_method']); ?>
-                                            </td>
-                                            <td style="font-size: 15px;" class="py-3">
-                                                <?php echo htmlspecialchars($order['address']); ?>
-                                            </td>
-                                        </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
+    <?php while ($order = $order_result->fetch_assoc()): ?>
+        <tr class="border-b">
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo htmlspecialchars($order['order_id']); ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo htmlspecialchars($order['order_date']); ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo htmlspecialchars($order['status']); ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo number_format($order['total'], 0, ',', '.') . 'đ'; ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo htmlspecialchars($order['payment_method']); ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php echo htmlspecialchars($order['address']); ?>
+            </td>
+            <td style="font-size: 15px;" class="py-3">
+                <?php if ($order['status'] == 'Cancelled'): ?>
+                    <!-- Nút mua lại -->
+                    <form method="POST" action="">
+                        <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
+                        <button type="submit" class="btn btn-success">Mua lại</button>
+                    </form>
+                <?php else: ?>
+                    <!-- Nút hủy đơn -->
+                    <form method="POST" action="cancel_order.php">
+                        <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
+                        <button type="submit" class="btn btn-danger" onclick="confirmCancel(<?php echo $order['order_id']; ?>)">Hủy</button>
+                    </form>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+</tbody>
+
                             </table>
                         </div>
 
@@ -436,6 +454,24 @@ $result = $stmt->get_result();
         function confirmDelete() {
             return confirm('Bạn có muốn xóa sản phẩm này khỏi danh sách yêu thích?');
         }
+
+        function confirmCancel(orderId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Có, hủy đơn!',
+            cancelButtonText: 'Không, giữ đơn'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Gửi form hủy đơn nếu người dùng đồng ý
+                document.getElementById('cancelForm_' + orderId).submit();
+            }
+        });
+    }
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
