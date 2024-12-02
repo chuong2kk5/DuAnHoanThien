@@ -1,3 +1,39 @@
+    <?php
+    require 'mail_config.php';
+    
+    if (isset($_GET['vnp_ResponseCode']) && $_GET['vnp_ResponseCode'] == '00') {
+        $to = "zeisc2@gmail.com";
+        $subject = "Xác nhận thanh toán đơn hàng #" . $_GET['vnp_TxnRef'];
+        $body = "
+           <div class='email-container'>
+        <div class='email-header'>
+            <h1>Cảm ơn anh/chị đã mua hàng!</h1>
+        </div>
+        <div class='email-body'>
+            <h2>Thông tin đơn hàng</h2>
+            <ul>
+                <li><strong>Mã giao dịch:</strong> {$_GET['vnp_TxnRef']}</li>
+                <li><strong>Số tiền:</strong> " . number_format($_GET['vnp_Amount'] / 100, 0, ',', '.') . " VNĐ</li>
+                <li><strong>Nội dung:</strong> {$_GET['vnp_OrderInfo']}</li>
+            </ul>
+            <p>Chúng tôi đã nhận được thanh toán của anh/chị và sẽ xử lý đơn hàng trong thời gian sớm nhất. Nếu cần hỗ trợ, vui lòng liên hệ:</p>
+            <p>Email: <a href='mailto:support@yourwebsite.com'>support@yourwebsite.com</a></p>
+        </div>
+        <div class='email-footer'>
+            <p>&copy; 2024 YourWebsite. Tất cả các quyền được bảo lưu.</p>
+            <p><a href='https://beautiful.com'>Trang chủ</a> | <a href='https://yourwebsite.com/contact'>Liên hệ</a></p>
+        </div>
+    </div>
+        ";
+    
+        if (sendMail($to, $subject, $body)) {
+            echo "<h2>Email xác nhận đã được gửi!</h2>";
+        } else {
+            echo "<h2>Gửi email thất bại.</h2>";
+        }
+    }
+    ?>
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +44,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <style>
-   
+   .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            text-align: center;
+            padding: 20px 0;
+            background: #007bff;
+            color: #ffffff;
+            border-radius: 8px 8px 0 0;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .email-body h2 {
+            color: #007bff;
+        }
+        .email-footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #777777;
+        }
+        .email-footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
 
     .thank-you-container {
         text-align: center;

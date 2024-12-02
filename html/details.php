@@ -153,21 +153,25 @@ while ($variant = $variants_result->fetch_assoc()) {
                 <h2 class="h6">Giá: <span
                         class="price"><?php echo number_format($product['price'], 0, ',', '.') . ' ₫'; ?></span></h2>
                 <!-- Số lượng với nút tăng/giảm -->
-                 <!-- so san pham con trong gio hang -->
-                  <span class="h6">
+                <!-- so san pham con trong gio hang -->
+                <span class="h6">
                     Số lượng còn lại: <span id="available-quantity"><?php echo $product['quantity']; ?></span>
 
-                  </span>
-                  <div class="form-group">
-    <div class="input-group">
-        <button type="button" class="btn btn-secondary" id="decrease" onclick="updateQuantity(-1)">-</button>
-        <input style="text-align: center;" type="number" name="quantity" id="quantity" value="1" min="1" max="99">
-        <button type="button" class="btn btn-secondary" id="increase" onclick="updateQuantity(1)">+</button>
-    </div>
-</div>
+                </span>
+                <div class="form-group">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-secondary" id="decrease"
+                            onclick="updateQuantity(-1)">-</button>
+                        <input style="text-align: center;" type="number" name="quantity" id="quantity" value="1" min="1"
+                            max="99">
+                        <button type="button" class="btn btn-secondary" id="increase"
+                            onclick="updateQuantity(1)">+</button>
+                    </div>
+                </div>
 
-    <!-- Thêm trường ẩn để chứa số lượng tồn kho (được lấy từ PHP) -->
-            <input type="hidden" id="quantity" value="<?php echo $quantity; ?>"> <!-- Số lượng tồn kho của sản phẩm -->
+                <!-- Thêm trường ẩn để chứa số lượng tồn kho (được lấy từ PHP) -->
+                <input type="hidden" id="quantity" value="<?php echo $quantity; ?>">
+                <!-- Số lượng tồn kho của sản phẩm -->
 
                 <img src="https://media.canifa.com/attribute/swatch/f/r/freeship_tagdetail_desktop-02oct_1.webp" alt=""
                     style="max-width: 100%; height: auto;">
@@ -205,7 +209,7 @@ while ($variant = $variants_result->fetch_assoc()) {
                 </div>
 
                 <h6 id="total-price">Tổng tiền: <span
-                        id="total"><?php echo number_format($product['price'], 0,) . ' ₫'; ?></span></h6>
+                        id="total"><?php echo number_format($product['price'], 0, ) . ' ₫'; ?></span></h6>
 
                 <div class="form-group" style="display: flex;">
                     <!-- Form cho "Mua hàng" -->
@@ -306,13 +310,14 @@ while ($variant = $variants_result->fetch_assoc()) {
                                     <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
                                     <button class="btn btn-success" type="submit">Thêm vào Giỏ</button>
                                 </form>
-                                
-                                    <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
-                                    <a href="details.php?product_id=<?php echo $row['product_id']; ?>" class="flex items-center bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600 transition-colors duration-200"
-                                        type="submit">
-                                        Mua Ngay
-                                    </a>
-                                 
+
+                                <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
+                                <a href="details.php?product_id=<?php echo $row['product_id']; ?>"
+                                    class="flex items-center bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                                    type="submit">
+                                    Mua Ngay
+                                </a>
+
                             </div>
                         </div>
                     </div>
@@ -341,80 +346,80 @@ while ($variant = $variants_result->fetch_assoc()) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-   // Lắng nghe sự kiện thay đổi chọn màu và kích thước
-document.getElementById('color').addEventListener('change', updateTotalPrice);
-document.getElementById('size').addEventListener('change', updateTotalPrice);
+    // Lắng nghe sự kiện thay đổi chọn màu và kích thước
+    document.getElementById('color').addEventListener('change', updateTotalPrice);
+    document.getElementById('size').addEventListener('change', updateTotalPrice);
 
-// Lắng nghe sự kiện thay đổi số lượng
-document.getElementById('quantity').addEventListener('change', updateTotalPrice);
+    // Lắng nghe sự kiện thay đổi số lượng
+    document.getElementById('quantity').addEventListener('change', updateTotalPrice);
 
-// Hàm tăng giảm số lượng
-function updateQuantity(change) {
-    var quantityInput = document.getElementById('quantity');
-    var newQuantity = parseInt(quantityInput.value) + change;
-    if (newQuantity >= 1 && newQuantity <= 99) {
-        quantityInput.value = newQuantity;
-        updateTotalPrice(); // Cập nhật lại tổng tiền
+    // Hàm tăng giảm số lượng
+    function updateQuantity(change) {
+        var quantityInput = document.getElementById('quantity');
+        var newQuantity = parseInt(quantityInput.value) + change;
+        if (newQuantity >= 1 && newQuantity <= 99) {
+            quantityInput.value = newQuantity;
+            updateTotalPrice(); // Cập nhật lại tổng tiền
+        }
     }
-}
 
-// Hàm tính toán lại tổng tiền
-function updateTotalPrice() {
-    var quantity = parseInt(document.getElementById('quantity').value);
-    var selectedColor = document.getElementById('color').value;
-    var selectedSize = document.getElementById('size').value;
+    // Hàm tính toán lại tổng tiền
+    function updateTotalPrice() {
+        var quantity = parseInt(document.getElementById('quantity').value);
+        var selectedColor = document.getElementById('color').value;
+        var selectedSize = document.getElementById('size').value;
 
-    // Kiểm tra xem người dùng đã chọn cả màu và kích thước chưa
-    if (selectedColor && selectedSize) {
-        // Gửi yêu cầu AJAX để lấy giá của biến thể từ server
-        fetch(`get_variant_price.php?product_id=<?php echo $product_id; ?>&color=${selectedColor}&size=${selectedSize}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    var price = data.price;
-                    var total = price * quantity;
-                    document.getElementById('total').innerText = total.toLocaleString() + ' ₫'; // Cập nhật tổng tiền
-                } else {
-                    document.getElementById('total').innerText = 'Không tìm thấy biến thể';
-                }
-            })
-            .catch(error => {
-                console.log('Lỗi: ', error);
-            });
+        // Kiểm tra xem người dùng đã chọn cả màu và kích thước chưa
+        if (selectedColor && selectedSize) {
+            // Gửi yêu cầu AJAX để lấy giá của biến thể từ server
+            fetch(`get_variant_price.php?product_id=<?php echo $product_id; ?>&color=${selectedColor}&size=${selectedSize}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var price = data.price;
+                        var total = price * quantity;
+                        document.getElementById('total').innerText = total.toLocaleString() + ' ₫'; // Cập nhật tổng tiền
+                    } else {
+                        document.getElementById('total').innerText = 'Không tìm thấy biến thể';
+                    }
+                })
+                .catch(error => {
+                    console.log('Lỗi: ', error);
+                });
+        }
     }
-}
 
 
     // Lắng nghe sự kiện thay đổi chọn màu và kích thước
-document.getElementById('color').addEventListener('change', updatePrice);
-document.getElementById('size').addEventListener('change', updatePrice);
+    document.getElementById('color').addEventListener('change', updatePrice);
+    document.getElementById('size').addEventListener('change', updatePrice);
 
-function updatePrice() {
-    const selectedColor = document.getElementById('color').value;
-    const selectedSize = document.getElementById('size').value;
-    
-    if (selectedColor && selectedSize) {
-        // Gửi yêu cầu AJAX để lấy giá của biến thể từ server
-        fetch(`get_variant_price.php?product_id=<?php echo $product_id; ?>&color=${selectedColor}&size=${selectedSize}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cập nhật giá hiển thị trên trang
-                    document.getElementById('total').textContent = numberWithCommas(data.price) + ' ₫';
-                } else {
-                    document.getElementById('total').textContent = 'Không tìm thấy biến thể';
-                }
-            })
-.catch(error => {
-                console.log('Lỗi: ', error);
-            });
+    function updatePrice() {
+        const selectedColor = document.getElementById('color').value;
+        const selectedSize = document.getElementById('size').value;
+
+        if (selectedColor && selectedSize) {
+            // Gửi yêu cầu AJAX để lấy giá của biến thể từ server
+            fetch(`get_variant_price.php?product_id=<?php echo $product_id; ?>&color=${selectedColor}&size=${selectedSize}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Cập nhật giá hiển thị trên trang
+                        document.getElementById('total').textContent = numberWithCommas(data.price) + ' ₫';
+                    } else {
+                        document.getElementById('total').textContent = 'Không tìm thấy biến thể';
+                    }
+                })
+                .catch(error => {
+                    console.log('Lỗi: ', error);
+                });
+        }
     }
-}
 
-// Hàm định dạng số với dấu phẩy
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+    // Hàm định dạng số với dấu phẩy
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 </script>
 
 

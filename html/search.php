@@ -49,6 +49,7 @@ if ($searchQuery) {
                                 <img class="card-img-top" src="<?php echo $row['image_path']; ?>" alt="img-products">
                                 <h5 class="card-title text-success"><?php echo htmlspecialchars($row['name']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars($row['description'] ?? ''); ?></p>
+                                
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 <?php
 $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-$vnp_Returnurl = "http://localhost/duannhom/duAn1/html/thankyou.php";
+$vnp_Returnurl = "http://localhost/duAn1/html/thankyou.php";
 $vnp_TmnCode = "LZQZT9G8";
 $vnp_HashSecret = "DWV1B2D4O4L3N6CWF2YKNHMBTMAIKZI4";
 

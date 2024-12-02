@@ -132,11 +132,8 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
                                 <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
                                 <button class="btn btn-success" type="submit">Thêm vào Giỏ</button>
                             </form>
-
                             <a href="details.php?product_id=<?php echo $row['product_id']; ?>" class="flex items-center bg-blue-500 text-white px-2 py-1 round
                             ed-lg hover:bg-blue-600 transition-colors duration-200">Mua Ngay</a>
-                             
-                                 
                         </div>
                     </div>
 
