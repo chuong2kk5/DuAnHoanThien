@@ -1,7 +1,7 @@
     <?php
     require 'mail_config.php';
     
-    if (isset($_GET['vnp_ResponseCode']) && $_GET['vnp_ResponseCode'] == '00') {
+    if (isset($_GET['vnp_ResponseCode']) && $_GET['vnp_ResponseCode'] == '00' && $_GET['payment_method'] == 'COD') {
         $to = "zeisc2@gmail.com";
         $subject = "Xác nhận thanh toán đơn hàng #" . $_GET['vnp_TxnRef'];
         $body = "

@@ -19,6 +19,35 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Kiểm tra nếu có dữ liệu từ form
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id']) && isset($_POST['quantity'])) {
+    // Lấy thông tin sản phẩm từ POST
+    $product_id = $_POST['product_id'];
+    $quantity = $_POST['quantity'];
+    $price = $_POST['price'];
+    // Tạo giỏ hàng và thêm sản phẩm vào giỏ hàng
+
+    $cart = new Cart($user_id, $conn);
+    $cart->addItem($product_id, $quantity, $price);   
+
+    // Chuyển hướng người dùng tới trang thanh toán
+    header("Location: checkout.php");
+    exit();
+}
+
+foreach ($cartItems as $item) {
+    $product_id = $item['product_id'];
+    $quantity = $item['quantity'];
+
+    // Truy vấn giảm số lượng sản phẩm trong kho
+    $updatequantitySql = "UPDATE products SET quantity = quantity - ? WHERE product_id = ?";
+    $stmt = $conn->prepare($updatequantitySql);
+    $stmt->bind_param("ii", $quantity, $product_id);
+    $stmt->execute();
+}
+
+ 
 ?>
 <!DOCTYPE html>
 <html lang="vi">

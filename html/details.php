@@ -1,5 +1,10 @@
 <?php
 include '../admin/config.php';
+
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // include 'process_order.php';
 
 $product_id = $_GET['product_id'];
@@ -53,7 +58,7 @@ $comments_result = mysqli_query($conn, $comments_sql);
     <title>Product Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
+    <script src="https://kit.fontawesome.com/4dd88e3847.js" crossorigin="anonymous"></script>
     <style>
         .text-muted {
             color: #777;
@@ -230,7 +235,7 @@ $comments_result = mysqli_query($conn, $comments_sql);
                     echo '<span class="visually-hidden">Next</span>';
                     echo '</button>';
 
-                    echo '</div>'; // Kết thúc div carousel
+                    echo '</div>';
                 } else {
                     echo '<p>Không có hình ảnh cho sản phẩm này.</p>';
                 }
@@ -262,15 +267,12 @@ $comments_result = mysqli_query($conn, $comments_sql);
                     Số lượng còn lại: <span id="available-quantity"><?php echo $product['quantity']; ?></span>
 
                 </span>
-                <div class="form-group">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-secondary" id="decrease"
-                            onclick="updateQuantity(-1)">-</button>
-                        <input style="text-align: center;" type="number" name="quantity" id="quantity" value="1" min="1"
-                            max="<?php echo $product['quantity']; ?>" >
-                        <button type="button" class="btn btn-secondary" id="increase"
-                            onclick="updateQuantity(1)">+</button>
-                    </div>
+                <div class="input-group" style="margin-left: 5px;">
+                    <button type="button" class="btn btn-secondary" id="decrease"
+                        onclick="updateQuantity(-1)">-</button>
+                    <input style="text-align: center;" type="number" name="quantity" id="quantity" value="1" min="1"
+                        max="<?php echo $product['quantity']; ?>">
+                    <button type="button" class="btn btn-secondary" id="increase" onclick="updateQuantity(1)">+</button>
                 </div>
 
                 <!-- Thêm trường ẩn để chứa số lượng tồn kho (được lấy từ PHP) -->
@@ -317,39 +319,41 @@ $comments_result = mysqli_query($conn, $comments_sql);
 
                 <div class="form-group" style="display: flex;">
                     <!-- Form cho "Mua hàng" -->
-                    <form method="POST" style="width: 100%;  margin-right: 5px;" action="checkout.php">
-                        <!-- Thông tin sản phẩm -->
+                    <form method="POST" style="width: 100%; margin-right: 5px;" action="checkout.php">
                         <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                         <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
-                        <input type="hidden" name="quantity" id="quantity-form" value="55"  <!-- Số lượng sản phẩm -->
+                        <input type="hidden" name="quantity" id="quantity-form" value="4">
 
-                        <!-- Nút "Mua hàng" -->
                         <button type="submit" name="action" value="buy" class="btn btn-danger"
-                            style=" width: 100%;  padding: 8px;">Mua hàng</button>
+                            style="width: 100%; padding: 8px;" onclick="updateQuantityInForm()">Mua hàng</button>
                     </form>
 
-                    <!-- Form cho "Thêm vào giỏ hàng" -->
-                    <form method="POST" style="width: 100%;" action="cart_page.php">
-                        <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                        <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
-                        <input type="hidden" name="quantity" id="quantity-form" value="1">
 
-                        <button type="submit" name="action" class="btn btn-outline-light"
-                            style=" width: 100%; padding: 8px; color: #000; border: 1px solid #000;">Thêm vào giỏ
-                            hàng</button>
-                    </form>
                 </div>
 
+                </form>
+                <!-- Form cho "Thêm vào giỏ hàng" -->
+                <form method="POST" style="width: 100%;" action="cart_page.php">
+                    <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                    <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
+                    <input type="hidden" name="quantity" id="quantity-form" value="1">
 
-                <hr>
+                    <button type="submit" name="action" class="btn btn-outline-light"
+                        style=" width: 100%; padding: 8px; color: #000; border: 1px solid #000;">Thêm vào giỏ
+                        hàng</button>
+                </form>
+            </div>
 
-                <!-- Mô tả sản phẩm -->
-                <div class="form-group">
-                    <h4>Mô tả</h4>
-                    <p class="lead"><?php echo $product['description']; ?></p>
-                </div>
+
+            <hr>
+
+            <!-- Mô tả sản phẩm -->
+            <div class="form-group">
+                <h4>Mô tả</h4>
+                <p class="lead"><?php echo $product['description']; ?></p>
             </div>
         </div>
+    </div>
     </div>
     <hr />
     <div class="container mx-auto p-6">
@@ -464,6 +468,10 @@ $comments_result = mysqli_query($conn, $comments_sql);
                                 <span class="star">&#9733;</span>
                                 <span class="star">&#9733;</span>
                             </div>
+                            <div class="comment-actions">
+                                <button class="delete-btn" onclick="deleteComment()"><i class="fa-solid fa-trash"></i></button>
+
+                            </div>
                         </li>
                     <?php } ?>
                 </ul>
@@ -471,7 +479,7 @@ $comments_result = mysqli_query($conn, $comments_sql);
         </div>
     </div>
 
-
+<!-- footer -->
     <?php include '../include/footer.php'; ?>
 
 </body>
@@ -480,6 +488,29 @@ $comments_result = mysqli_query($conn, $comments_sql);
 
     const mainImage = document.getElementById('mainImage');
     mainImage.src = imagePath;
+    }
+    function updateQuantity(change) {
+        var quantityInput = document.getElementById('quantity');
+        var currentQuantity = parseInt(quantityInput.value);
+
+        // Tính toán số lượng mới
+        var newQuantity = currentQuantity + change;
+
+        // Kiểm tra điều kiện min và max
+        if (newQuantity < 1) {
+            newQuantity = 1;  // Không giảm số lượng nhỏ hơn 1
+        } else if (newQuantity > <?php echo $product['quantity']; ?>) {
+            newQuantity = <?php echo $product['quantity']; ?>;  // Không tăng số lượng lớn hơn số lượng tồn
+        }
+
+        // Cập nhật giá trị số lượng
+        quantityInput.value = newQuantity;
+    }
+
+    // Cập nhật giá trị số lượng trong form ẩn khi người dùng bấm "Mua hàng"
+    function updateQuantityInForm() {
+        var quantity = document.getElementById('quantity').value;
+        document.getElementById('quantity-form').value = quantity;  // Cập nhật giá trị số lượng vào trường ẩn
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

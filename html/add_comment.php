@@ -12,7 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
         $insert_comment_sql = "INSERT INTO comments (product_id, user_id, content, created_at) 
                                VALUES ($product_id, $user_id, '$comment_content', NOW())";
         if (mysqli_query($conn, $insert_comment_sql)) {
-            header("Location: details.php?product_id=$product_id");
+            echo "
+                <script> 
+                    alert('Đã đăng đánh giá');
+                    window.location.href = 'details.php?product_id=$product_id';
+                </script>
+            ";
+            
             exit;
         } else {
             echo "<p class='error'>Có lỗi xảy ra khi thêm bình luận. Vui lòng thử lại.</p>";
