@@ -68,7 +68,7 @@ error_reporting(E_ALL);
 
 <body>
 
-    <div class="sidebar">
+<div class="sidebar">
         <h2 class="text-center">Welcome admin</h2>
         <ul class="list-group">
             <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
@@ -78,7 +78,8 @@ error_reporting(E_ALL);
             <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
             <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
             <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
-            <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
+            <li class="list-group-item"><a href="slide.php">Thay đổi slide</a></li>
+            <li class="list-group-item bg-dark"><a href="../login/logout.php">Đăng xuất</a></li>
         </ul>
     </div>
 

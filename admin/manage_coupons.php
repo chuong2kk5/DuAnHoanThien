@@ -78,8 +78,8 @@ if ($result->num_rows > 0) {
 
 <body>
 
-    <div class="sidebar">
-        <h2 class="text-center">Bảng điều khiển Admin</h2>
+<div class="sidebar">
+        <h2 class="text-center">Welcome admin</h2>
         <ul class="list-group">
             <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
             <li class="list-group-item"><a href="manage_products.php">Quản lý sản phẩm</a></li>
@@ -88,7 +88,8 @@ if ($result->num_rows > 0) {
             <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
             <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
             <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
-            <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
+            <li class="list-group-item"><a href="slide.php">Thay đổi slide</a></li>
+            <li class="list-group-item bg-dark"><a href="../login/logout.php">Đăng xuất</a></li>
         </ul>
     </div>
 

@@ -103,7 +103,7 @@ $total = $cart->getTotal();
                             <form action="cart_page.php" method="post">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id" value="<?php echo $productId; ?>">
-                                <input type="number" name="quantity" min="1"
+                                <input type="number" name="quantity" min="1" max = "10"
                                        value="<?php echo $product['quantity']; ?>"
                                        class="border rounded w-16 text-center">
                                 <button type="submit"

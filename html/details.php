@@ -267,7 +267,7 @@ $comments_result = mysqli_query($conn, $comments_sql);
                         <button type="button" class="btn btn-secondary" id="decrease"
                             onclick="updateQuantity(-1)">-</button>
                         <input style="text-align: center;" type="number" name="quantity" id="quantity" value="1" min="1"
-                            max="99">
+                            max="<?php echo $product['quantity']; ?>" >
                         <button type="button" class="btn btn-secondary" id="increase"
                             onclick="updateQuantity(1)">+</button>
                     </div>
@@ -321,7 +321,7 @@ $comments_result = mysqli_query($conn, $comments_sql);
                         <!-- Thông tin sản phẩm -->
                         <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                         <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
-                        <input type="hidden" name="quantity" id="quantity-form" value="1"> <!-- Số lượng sản phẩm -->
+                        <input type="hidden" name="quantity" id="quantity-form" value="55"  <!-- Số lượng sản phẩm -->
 
                         <!-- Nút "Mua hàng" -->
                         <button type="submit" name="action" value="buy" class="btn btn-danger"

@@ -174,7 +174,7 @@
 
 <script>
     const confettiContainer = document.querySelector('.confetti');
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 140; i++) {
         const confetti = document.createElement('span');
         confetti.style.left = `${Math.random() * 100}%`;
         confetti.style.animationDelay = `${Math.random() * 3}s`;

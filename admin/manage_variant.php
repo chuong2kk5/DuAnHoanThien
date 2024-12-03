@@ -47,21 +47,67 @@ $result = $conn->query($sql);
         <title>Thêm Biến Thể</title>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+       body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            width: 250px;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            padding: 15px;
+            font-size: 1.5rem;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            color: white;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .list-group-item {
+            background-color: #343a40;
+            border: none;
+        }
+        .list-group-item a {
+            color: white;
+        }
+        .list-group-item a:hover {
+            background-color: #495057;
+            color: white;
+        }
+    </style>
 
 <body>
-        <div class="sidebar">
-                <h2 class="text-center">Welcome admin</h2>
-                <ul class="list-group">
-                        <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
-                        <li class="list-group-item"><a href="manage_products.php">Quản lý sản phẩm</a></li>
-                        <li class="list-group-item"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
-                        <li class="list-group-item"><a href="manage_users.php">Quản lý người dùng</a></li>
-                        <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
-                        <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
-                        <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
-                        <li class="list-group-item bg-dark"><a href="#">Đăng xuất</a></li>
-                </ul>
-        </div>
+<div class="sidebar">
+        <h2 class="text-center">Welcome admin</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="index.php">Trang chủ</a></li>
+            <li class="list-group-item"><a href="manage_products.php">Quản lý sản phẩm</a></li>
+            <li class="list-group-item"><a href="manage_orders.php">Quản lý đơn hàng</a></li>
+            <li class="list-group-item"><a href="manage_users.php">Quản lý người dùng</a></li>
+            <li class="list-group-item"><a href="manage_categories.php">Quản lý danh mục</a></li>
+            <li class="list-group-item"><a href="manage_variant.php">Quản lý Biến thể</a></li>
+            <li class="list-group-item"><a href="manage_coupons.php">Mã giảm giá</a></li>
+            <li class="list-group-item"><a href="slide.php">Thay đổi slide</a></li>
+            <li class="list-group-item bg-dark"><a href="../login/logout.php">Đăng xuất</a></li>
+        </ul>
+    </div>
+    
         <div class="container">
     <div class="row">
         <div class="col-md-12">
