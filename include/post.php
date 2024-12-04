@@ -80,7 +80,7 @@ $result = $conn->query("SELECT * FROM posts ORDER BY created_at DESC");
             border-radius: 4px;
         }
 
-        .btn {
+        .btn-primary {
             display: inline-block;
             background-color: #007bff;
             color: white;
@@ -91,7 +91,7 @@ $result = $conn->query("SELECT * FROM posts ORDER BY created_at DESC");
             font-size: 1rem;
         }
 
-        .btn:hover {
+        .btn-primary:hover {
             background-color: #0056b3;
         }
 
@@ -128,7 +128,7 @@ $result = $conn->query("SELECT * FROM posts ORDER BY created_at DESC");
                     </h2>
                    
                     <p><?= htmlspecialchars(substr($row['content'], 0, 100)) ?>...</p>
-                    <a href="post_detail.php?id=<?= $row['id'] ?>" class="btn">Read More</a>
+                    <a href="post_detail.php?id=<?= $row['id'] ?>" class="btn-primary">Read More</a>
                 </div>
             <?php endwhile; ?>
         </div>

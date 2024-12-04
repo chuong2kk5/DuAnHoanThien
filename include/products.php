@@ -12,9 +12,6 @@ if (!$isLoggedIn) {
 
 // favorite 
 
-
-
-// Cấu hình phân trang
 $limit = 8; // Số sản phẩm mỗi trang
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại
 $offset = ($page - 1) * $limit; // Tính toán vị trí bắt đầu của dữ liệu
@@ -43,6 +40,8 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
     <title>Sản Phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <style>
         .pagination {
             display: flex;
@@ -80,12 +79,62 @@ $total_pages = ceil($total_products / $limit); // Tổng số trang
             background-color: #ccc;
             pointer-events: none;
         }
+
+        .filter {
+    margin: 10px 0;
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa icon và dropdown */
+}
+
+.filter label {
+    font-size: 18px;
+    color: #555; /* Màu icon */
+    display: flex;
+    align-items: center;
+}
+
+.filter select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.filter select:hover {
+    border-color: #007bff;
+    background-color: #e9ecef;
+}
+
+.filter select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
     </style>
 </head>
 
 <body class="bg-gray-100">
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold text-center mb-8">Sản Phẩm</h1>
+
+        <!-- filter -->
+        <div class="filter">
+    <label for="filter">
+        <i class="fa fa-filter"></i> <!-- Icon filter -->
+    </label>
+    <select name="filter" id="filter">
+        <option value="100">100</option>
+        <option value="150">150</option>
+        <option value="200">200</option>
+        <option value="> 250"> > 250</option>
+    </select>
+</div>
+
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php
